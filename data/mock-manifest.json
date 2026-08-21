@@ -1,0 +1,155 @@
+{
+  "images": [
+    {
+      "id": "4e3685fd71dc",
+      "slug": "night-lights",
+      "category": "painting",
+      "caption": "magical lights",
+      "title": "lamp",
+      "dimensions": "2*3",
+      "price": 600,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "thumbKey": "images/4e3685fd71dc/thumb.webp",
+      "fullKey": "images/4e3685fd71dc/full.webp",
+      "photos": [
+        {
+          "id": "primary",
+          "thumbKey": "images/4e3685fd71dc/thumb.webp",
+          "fullKey": "images/4e3685fd71dc/full.webp"
+        },
+        {
+          "id": "066f378b",
+          "thumbKey": "images/4e3685fd71dc/photos/066f378b/thumb.webp",
+          "fullKey": "images/4e3685fd71dc/photos/066f378b/full.webp"
+        },
+        {
+          "id": "78983d9e",
+          "thumbKey": "images/4e3685fd71dc/photos/78983d9e/thumb.webp",
+          "fullKey": "images/4e3685fd71dc/photos/78983d9e/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-21T20:28:54.559Z"
+    },
+    {
+      "id": "ee865e96e09f",
+      "slug": "lady-god",
+      "category": "painting",
+      "title": "God",
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "thumbKey": "images/ee865e96e09f/thumb.webp",
+      "fullKey": "images/ee865e96e09f/full.webp",
+      "photos": [
+        {
+          "id": "primary",
+          "thumbKey": "images/ee865e96e09f/thumb.webp",
+          "fullKey": "images/ee865e96e09f/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-21T20:28:54.449Z"
+    },
+    {
+      "id": "e34b37532e81",
+      "slug": "untitled-4",
+      "category": "painting",
+      "title": "Untitled",
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "thumbKey": "images/e34b37532e81/thumb.webp",
+      "fullKey": "images/e34b37532e81/full.webp",
+      "photos": [
+        {
+          "id": "primary",
+          "thumbKey": "images/e34b37532e81/thumb.webp",
+          "fullKey": "images/e34b37532e81/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-21T20:28:54.339Z"
+    },
+    {
+      "id": "c887ccabbe59",
+      "slug": "untitled-3",
+      "category": "painting",
+      "title": "Untitled",
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "thumbKey": "images/c887ccabbe59/thumb.webp",
+      "fullKey": "images/c887ccabbe59/full.webp",
+      "photos": [
+        {
+          "id": "primary",
+          "thumbKey": "images/c887ccabbe59/thumb.webp",
+          "fullKey": "images/c887ccabbe59/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-21T20:28:54.247Z"
+    },
+    {
+      "id": "3c0d55cc071e",
+      "slug": "untitled-2",
+      "category": "painting",
+      "title": "Untitled",
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "thumbKey": "images/3c0d55cc071e/thumb.webp",
+      "fullKey": "images/3c0d55cc071e/full.webp",
+      "photos": [
+        {
+          "id": "primary",
+          "thumbKey": "images/3c0d55cc071e/thumb.webp",
+          "fullKey": "images/3c0d55cc071e/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-21T20:28:54.147Z"
+    },
+    {
+      "id": "84b426dab699",
+      "slug": "untitled",
+      "category": "painting",
+      "title": "Untitled",
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "thumbKey": "images/84b426dab699/thumb.webp",
+      "fullKey": "images/84b426dab699/full.webp",
+      "photos": [
+        {
+          "id": "primary",
+          "thumbKey": "images/84b426dab699/thumb.webp",
+          "fullKey": "images/84b426dab699/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-21T20:28:54.043Z"
+    },
+    {
+      "id": "c5e3d0176fb0",
+      "slug": "beauti-of-nature",
+      "category": "painting",
+      "title": "butterfly",
+      "medium": "pastel colors",
+      "dimensions": "4*6",
+      "year": 2026,
+      "price": 500,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": true,
+      "collection": "nature elements",
+      "thumbKey": "images/c5e3d0176fb0/thumb.webp",
+      "fullKey": "images/c5e3d0176fb0/full.webp",
+      "photos": [
+        {
+          "id": "primary",
+          "thumbKey": "images/c5e3d0176fb0/thumb.webp",
+          "fullKey": "images/c5e3d0176fb0/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-21T20:23:57.773Z"
+    }
+  ]
+}
