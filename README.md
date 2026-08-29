@@ -1,57 +1,68 @@
 # Sandook Studio
 
-Artist portfolio and gallery for original paintings, DIY projects, and commission inquiries.
+Artist portfolio and online gallery for original paintings, DIY projects, and commission inquiries.
 
-## Quick start (local testing)
+Built with Next.js — public gallery, admin upload panel, WhatsApp inquiries, and multi-photo listings.
+
+## Features
+
+- **Public gallery** — browse paintings and DIY work with filters by type, status, and collection
+- **Artwork detail pages** — photo carousel with next/previous navigation and thumbnails
+- **Multi-photo items** — upload multiple images per piece (like a product gallery)
+- **Admin panel** — password-protected upload and metadata editing at `/admin`
+- **WhatsApp integration** — floating chat button and pre-filled inquiry links
+- **Contact form** — general, purchase, and commission inquiries
+- **Local or cloud storage** — works locally without setup; Cloudflare R2 for production
+
+## Quick start
 
 ```bash
+git clone git@github.com:amankapoor27/sandook.git
+cd sandook
 npm install
 cp .env.example .env.local   # optional — dev defaults work without this
 npm run dev
 ```
 
+Open [http://localhost:3000](http://localhost:3000).
+
 | URL | Purpose |
 |-----|---------|
-| http://localhost:3000 | Homepage — featured work, DIY teaser, about |
-| http://localhost:3000/gallery | Paintings & DIY — filter by type, status, collection |
-| http://localhost:3000/gallery/[slug] | Piece detail with inquire CTA |
-| http://localhost:3000/about | About the studio |
-| http://localhost:3000/commissions | Commission info & process |
-| http://localhost:3000/contact | Inquiry form |
-| http://localhost:3000/admin | Upload panel (password: `dev`) |
-| http://localhost:3000/admin/login | Admin login |
+| `/` | Homepage |
+| `/gallery` | Full gallery with filters |
+| `/gallery/[slug]` | Artwork detail with photo carousel |
+| `/about` | About the studio |
+| `/commissions` | Commission info |
+| `/contact` | Inquiry form |
+| `/admin` | Upload panel (local password: `dev`) |
 
-## How it works
+## Admin workflow
 
-- **No R2 credentials?** Images save to `./storage/` on disk. Served via `/api/media/...`.
-- **R2 configured?** Images upload to Cloudflare R2. Served via `R2_PUBLIC_URL`.
-- **Inquiries** save to `storage/inquiries.json` (local) or R2. Optional email via Resend.
-- **WhatsApp** — set `NEXT_PUBLIC_WHATSAPP_NUMBER` (e.g. `919876543210`) to enable floating chat button, footer link, and pre-filled inquiry links on artwork pages.
+1. Sign in at `/admin/login` (password: `dev` locally)
+2. Choose category — **Painting** or **DIY**
+3. Drop one or more images — multiple files become one listing with multiple photos
+4. Click **Edit** to set title, price, medium, dimensions, collection, etc.
+5. Use **Add photos** on an existing item to attach more angles or detail shots
 
-## WhatsApp setup
+## Environment variables
 
-Add your number to `.env.local`:
+Copy `.env.example` to `.env.local` for local development.
 
-```
-NEXT_PUBLIC_WHATSAPP_NUMBER=919876543210
-```
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `ADMIN_PASSWORD` | Production | Admin login password |
+| `SESSION_SECRET` | Production | 32+ char random string for session cookies |
+| `NEXT_PUBLIC_SITE_URL` | Production | Public site URL |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Optional | WhatsApp number in international format (e.g. `919876543210`) |
+| `R2_ACCOUNT_ID` | Production | Cloudflare R2 account ID |
+| `R2_ACCESS_KEY_ID` | Production | R2 access key |
+| `R2_SECRET_ACCESS_KEY` | Production | R2 secret key |
+| `R2_BUCKET_NAME` | Production | R2 bucket name |
+| `R2_PUBLIC_URL` | Production | Public URL for R2 media |
+| `RESEND_API_KEY` | Optional | Send inquiry emails via Resend |
+| `INQUIRY_EMAIL` | Optional | Email address for inquiry notifications |
 
-Use international format: country code + number, no `+` or spaces. India example: `91` + 10-digit mobile.
-
-When set, visitors get:
-- Floating green WhatsApp button on all public pages
-- "Chat on WhatsApp" on available artwork pages (pre-filled with piece title + link)
-- WhatsApp option on Contact and Commissions pages
-
-No WhatsApp API keys required — uses standard `wa.me` links.
-
-## Stack
-
-- Next.js 16 (App Router) — public site, admin UI, API routes
-- Sharp — resize + WebP conversion on upload
-- Cloudflare R2 — production object storage (optional locally)
-- Jose — signed session cookies for admin auth
-- Resend — optional inquiry email notifications
+Without R2 credentials, images are stored in `./storage/` locally and served via `/api/media/...`.
 
 ## Scripts
 
@@ -62,55 +73,44 @@ npm run start    # production server
 npm run lint     # ESLint
 ```
 
-## Admin upload flow
+## Stack
 
-1. Open `/admin/login` and sign in with `dev`
-2. Choose category (Painting or DIY)
-3. For paintings: fill title, medium, dimensions, year, price, status, collection, featured
-4. Drag images onto the upload zone
-5. View on the public site — pieces link to `/gallery/[slug]`
-
-## Production env vars
-
-Set in Vercel (or your host):
-
-```
-ADMIN_PASSWORD=<strong random password>
-SESSION_SECRET=<32+ char random string>
-NEXT_PUBLIC_SITE_URL=https://yourdomain.com
-R2_ACCOUNT_ID=...
-R2_ACCESS_KEY_ID=...
-R2_SECRET_ACCESS_KEY=...
-R2_BUCKET_NAME=sandook-media
-R2_PUBLIC_URL=https://media.yourdomain.com
-RESEND_API_KEY=re_...          # optional
-INQUIRY_EMAIL=you@example.com  # optional
-CONTACT_EMAIL=you@example.com  # optional fallback
-```
+- [Next.js 16](https://nextjs.org) (App Router)
+- [TypeScript](https://www.typescriptlang.org)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Sharp](https://sharp.pixelplumbing.com) — image resize and WebP conversion
+- [Jose](https://github.com/panva/jose) — session auth
+- [Cloudflare R2](https://www.cloudflare.com/products/r2/) — production storage (optional)
 
 ## Project structure
 
 ```
 app/
-  (site)/           Public pages with Header/Footer shell
-  admin/            Password-protected upload panel
+  (site)/           Public pages
+  admin/            Upload panel
   api/              Gallery, upload, inquiry, auth, media
 components/
-  site/             Header, Footer, PageShell
-  home/             Homepage sections
-  gallery/          Grid, filters, lightbox
-  work/             Artwork detail
-  contact/          Inquiry form
+  gallery/          Grid, carousel, lightbox
   admin/            Upload UI
-lib/                Storage, auth, manifest, gallery, inquiry, site config
+  site/             Header, footer, layout
+lib/                Storage, auth, manifest, gallery helpers
 data/               Seed manifest for local dev
-storage/            Local uploads & inquiries (gitignored)
+storage/            Local uploads (gitignored)
 ```
 
-## Backwards compatibility
+## Contributing
 
-Existing uploads without new metadata fields are normalized automatically:
+1. Ask the repo owner for a **Write** collaborator invite on GitHub
+2. Clone the repo and create a branch: `git checkout -b feature/your-change`
+3. Make changes, commit, and push: `git push -u origin feature/your-change`
+4. Open a Pull Request on GitHub
 
-- **Title** from caption, or "Untitled"
-- **Slug** from image id
-- **Status** defaults to available
+Do not commit `.env.local`, `storage/`, or production secrets.
+
+## Deployment
+
+Recommended host: [Vercel](https://vercel.com). Set production env vars in the Vercel dashboard, connect R2 for media storage, and point your custom domain to the deployment.
+
+## License
+
+Private project — all rights reserved unless otherwise specified by the owner.
