@@ -1,8 +1,18 @@
 import Link from "next/link";
+import { TrackedLink } from "@/components/analytics/TrackedLink";
 import { ImageCarousel } from "@/components/gallery/ImageCarousel";
+import { ArtworkDetailShell } from "@/components/work/ArtworkDetailShell";
 import { WhatsAppButton } from "@/components/site/WhatsAppButton";
 import type { GalleryImageView } from "@/lib/gallery";
+import {
+  artworkHref,
+  galleryHref,
+  type GalleryCategoryFilter,
+} from "@/lib/gallery-nav";
+import { usesPrintFieldSet } from "@/lib/category-utils";
+import { resolvePrintSizes, resolvePrintSurfaces } from "@/lib/prints";
 import { formatPrice, siteConfig, statusLabel } from "@/lib/site";
+import type { VocabularyCategory } from "@/lib/types";
 import {
   isWhatsAppConfigured,
   whatsAppArtworkUrl,
@@ -12,24 +22,36 @@ type ArtworkDetailProps = {
   artwork: GalleryImageView;
   prev: GalleryImageView | null;
   next: GalleryImageView | null;
+  galleryCategory?: GalleryCategoryFilter;
+  categories?: VocabularyCategory[];
 };
 
-export function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProps) {
-  const isPainting = artwork.category === "painting";
+export function ArtworkDetail({
+  artwork,
+  prev,
+  next,
+  galleryCategory = "all",
+  categories = [],
+}: ArtworkDetailProps) {
+  const isPrint = usesPrintFieldSet(artwork.category, categories);
+  const isPainting = !isPrint;
   const priceDisplay = isPainting
     ? formatPrice(artwork.price, artwork.priceOnRequest)
     : "";
+  const printSizes = resolvePrintSizes(artwork);
+  const printSurfaces = resolvePrintSurfaces(artwork);
 
   return (
-    <article className="mx-auto max-w-5xl px-6 py-12 md:py-16">
-      <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-        <ImageCarousel photos={artwork.photos} title={artwork.title} />
+    <ArtworkDetailShell galleryCategory={galleryCategory}>
+      <article className="rounded-2xl border border-border bg-surface px-6 py-12 shadow-lg md:px-10 md:py-16">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <ImageCarousel photos={artwork.photos} title={artwork.title} />
 
-        <div className="flex flex-col justify-center space-y-6">
+          <div className="flex flex-col justify-center space-y-6">
           <div>
             <p className="section-label">
-              {artwork.category === "diy"
-                ? "DIY project"
+              {isPrint
+                ? "Art print"
                 : (artwork.collection ?? "Original painting")}
             </p>
             <h1 className="font-display mt-2 text-4xl font-medium text-foreground">
@@ -40,36 +62,82 @@ export function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProps) {
             )}
           </div>
 
-          <dl className="grid gap-3 text-sm">
+          <dl className="grid gap-3 text-sm text-foreground">
             {artwork.medium && (
               <div className="flex gap-2">
-                <dt className="w-24 shrink-0 text-muted">Medium</dt>
-                <dd>{artwork.medium}</dd>
+                <dt className="w-24 shrink-0 font-medium text-foreground/70">
+                  Medium
+                </dt>
+                <dd className="text-foreground">{artwork.medium}</dd>
               </div>
             )}
             {artwork.dimensions && (
               <div className="flex gap-2">
-                <dt className="w-24 shrink-0 text-muted">Dimensions</dt>
-                <dd>{artwork.dimensions}</dd>
+                <dt className="w-24 shrink-0 font-medium text-foreground/70">
+                  Dimensions
+                </dt>
+                <dd className="text-foreground">{artwork.dimensions}</dd>
               </div>
             )}
             {artwork.year && (
               <div className="flex gap-2">
-                <dt className="w-24 shrink-0 text-muted">Year</dt>
-                <dd>{artwork.year}</dd>
+                <dt className="w-24 shrink-0 font-medium text-foreground/70">
+                  Year
+                </dt>
+                <dd className="text-foreground">{artwork.year}</dd>
               </div>
             )}
             {isPainting && (
               <div className="flex gap-2">
-                <dt className="w-24 shrink-0 text-muted">Status</dt>
-                <dd>{statusLabel(artwork.status)}</dd>
+                <dt className="w-24 shrink-0 font-medium text-foreground/70">
+                  Status
+                </dt>
+                <dd className="text-foreground">
+                  {statusLabel(artwork.status)}
+                </dd>
               </div>
             )}
             {priceDisplay && (
               <div className="flex gap-2">
-                <dt className="w-24 shrink-0 text-muted">Price</dt>
-                <dd className="font-medium">{priceDisplay}</dd>
+                <dt className="w-24 shrink-0 font-medium text-foreground/70">
+                  Price
+                </dt>
+                <dd className="font-medium text-foreground">{priceDisplay}</dd>
               </div>
+            )}
+            {isPrint && (
+              <>
+                <div className="flex gap-2">
+                  <dt className="w-24 shrink-0 font-medium text-foreground/70">
+                    Sizes
+                  </dt>
+                  <dd className="flex flex-wrap gap-1.5 text-foreground">
+                    {printSizes.map((size) => (
+                      <span
+                        key={size}
+                        className="rounded-full border border-border px-2.5 py-0.5 text-xs text-foreground"
+                      >
+                        {size}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt className="w-24 shrink-0 font-medium text-foreground/70">
+                    Surfaces
+                  </dt>
+                  <dd className="flex flex-wrap gap-1.5 text-foreground">
+                    {printSurfaces.map((surface) => (
+                      <span
+                        key={surface}
+                        className="rounded-full border border-border px-2.5 py-0.5 text-xs text-foreground"
+                      >
+                        {surface}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              </>
             )}
           </dl>
 
@@ -78,12 +146,14 @@ export function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProps) {
               (artwork.status === "available" ||
                 artwork.status === "not_for_sale") && (
               <>
-                <Link
+                <TrackedLink
                   href={`/contact?type=purchase&slug=${encodeURIComponent(artwork.slug)}&title=${encodeURIComponent(artwork.title)}`}
-                  className="rounded-full bg-accent px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+                  analyticsEvent="inquire_click"
+                  analyticsSlug={artwork.slug}
+                  className="btn btn-pill bg-accent px-6 py-2.5 text-sm font-medium text-white hover:opacity-90"
                 >
                   Inquire via form
-                </Link>
+                </TrackedLink>
                 {artwork.status === "available" && isWhatsAppConfigured() && (
                   <WhatsAppButton
                     href={whatsAppArtworkUrl(
@@ -93,13 +163,24 @@ export function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProps) {
                       artwork.priceOnRequest,
                     )}
                     label="Chat on WhatsApp"
+                    trackSlug={artwork.slug}
                   />
                 )}
               </>
             )}
+            {isPrint && (
+              <TrackedLink
+                href={`/contact?type=purchase&slug=${encodeURIComponent(artwork.slug)}&title=${encodeURIComponent(artwork.title)}`}
+                analyticsEvent="inquire_click"
+                analyticsSlug={artwork.slug}
+                className="btn btn-pill bg-accent px-6 py-2.5 text-sm font-medium text-white hover:opacity-90"
+              >
+                Order a print
+              </TrackedLink>
+            )}
             <Link
-              href="/gallery"
-              className="rounded-full border border-border px-6 py-2.5 text-sm font-medium text-foreground hover:border-accent hover:text-accent"
+              href={galleryHref(galleryCategory)}
+              className="btn btn-pill btn-secondary px-6 py-2.5 text-sm font-medium"
             >
               Back to gallery
             </Link>
@@ -113,7 +194,7 @@ export function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProps) {
       >
         {prev ? (
           <Link
-            href={`/gallery/${prev.slug}`}
+            href={artworkHref(prev.slug, galleryCategory)}
             className="group text-sm text-muted hover:text-accent"
           >
             <span className="block text-xs uppercase tracking-widest">
@@ -128,7 +209,7 @@ export function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProps) {
         )}
         {next ? (
           <Link
-            href={`/gallery/${next.slug}`}
+            href={artworkHref(next.slug, galleryCategory)}
             className="group text-right text-sm text-muted hover:text-accent"
           >
             <span className="block text-xs uppercase tracking-widest">Next</span>
@@ -140,7 +221,8 @@ export function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProps) {
           <span />
         )}
       </nav>
-    </article>
+      </article>
+    </ArtworkDetailShell>
   );
 }
 

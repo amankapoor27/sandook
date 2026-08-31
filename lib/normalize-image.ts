@@ -1,4 +1,5 @@
 import type { GalleryImage, ItemPhoto } from "./types";
+import { normalizeCategory } from "./categories";
 
 /** Backwards-compatible normalization for legacy manifest entries. */
 export function normalizeImage(
@@ -23,7 +24,7 @@ export function normalizeImage(
   return {
     id: raw.id,
     slug: raw.slug?.trim() || raw.id,
-    category: raw.category,
+    category: normalizeCategory(raw.category),
     caption: raw.caption,
     title,
     medium: raw.medium,
@@ -33,7 +34,10 @@ export function normalizeImage(
     priceOnRequest: raw.priceOnRequest ?? false,
     status: raw.status ?? "available",
     featured: raw.featured ?? false,
+    homepageHero: raw.homepageHero ?? false,
     collection: raw.collection,
+    printSizes: raw.printSizes,
+    printSurfaces: raw.printSurfaces,
     thumbKey: primary?.thumbKey ?? raw.thumbKey,
     fullKey: primary?.fullKey ?? raw.fullKey,
     photos,

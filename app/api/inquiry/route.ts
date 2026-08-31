@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { saveInquiry } from "@/lib/inquiry";
+import {
+  checkRateLimit,
+  getClientIp,
+  rateLimitResponse,
+} from "@/lib/rate-limit";
+
+const INQUIRY_LIMIT = 10;
+const INQUIRY_WINDOW_MS = 60 * 60 * 1000;
 
 const inquirySchema = z.object({
   type: z.enum(["general", "purchase", "commission"]),
@@ -9,9 +17,16 @@ const inquirySchema = z.object({
   message: z.string().trim().min(1, "Message is required").max(5000),
   artworkSlug: z.string().trim().max(120).optional(),
   artworkTitle: z.string().trim().max(200).optional(),
+  _sandook_hp: z.string().max(200).optional(),
 });
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const limit = checkRateLimit(`inquiry:${ip}`, INQUIRY_LIMIT, INQUIRY_WINDOW_MS);
+  if (!limit.allowed) {
+    return rateLimitResponse(limit.retryAfterSeconds);
+  }
+
   let body: unknown;
   try {
     body = await request.json();
@@ -27,6 +42,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const inquiry = await saveInquiry(parsed.data);
+  const { _sandook_hp, ...inquiryInput } = parsed.data;
+  if (_sandook_hp?.trim()) {
+    return NextResponse.json({ ok: true, id: "ok" });
+  }
+
+  const inquiry = await saveInquiry(inquiryInput);
   return NextResponse.json({ ok: true, id: inquiry.id });
 }

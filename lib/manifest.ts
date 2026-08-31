@@ -48,7 +48,16 @@ export async function addImageToManifest(
   image: GalleryImage,
 ): Promise<Manifest> {
   const manifest = await getManifest();
-  manifest.images.unshift(normalizeImage(image));
+  const normalized = normalizeImage(image);
+
+  if (normalized.homepageHero) {
+    manifest.images = manifest.images.map((img) => ({
+      ...img,
+      homepageHero: false,
+    }));
+  }
+
+  manifest.images.unshift(normalized);
   await putManifest(manifest);
   return manifest;
 }
@@ -67,6 +76,18 @@ export async function updateImageInManifest(
     ...manifest.images[index],
     ...updates,
   });
+
+  if (updates.homepageHero) {
+    for (let i = 0; i < manifest.images.length; i++) {
+      if (i !== index) {
+        manifest.images[i] = {
+          ...manifest.images[i],
+          homepageHero: false,
+        };
+      }
+    }
+  }
+
   await putManifest(manifest);
   return manifest;
 }

@@ -54,7 +54,7 @@ export function ItemPhotosEditor({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-medium text-zinc-900">
+        <p className="text-sm font-medium text-foreground">
           Photos ({image.photos.length}/{MAX_PHOTOS_PER_ITEM})
         </p>
         {!atLimit && (
@@ -72,7 +72,7 @@ export function ItemPhotosEditor({
               type="button"
               disabled={disabled || busy}
               onClick={() => inputRef.current?.click()}
-              className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium hover:bg-white disabled:opacity-60"
+              className="btn btn-secondary text-xs"
             >
               {busy ? "Uploading…" : "Add photos"}
             </button>
@@ -84,7 +84,7 @@ export function ItemPhotosEditor({
         {image.photos.map((photo, index) => (
           <div
             key={photo.id}
-            className="group relative h-20 w-20 overflow-hidden rounded border border-zinc-200 bg-zinc-100"
+            className="group relative h-20 w-20 overflow-hidden rounded border border-border bg-surface"
           >
             <Image
               src={photo.thumbUrl}
@@ -94,7 +94,7 @@ export function ItemPhotosEditor({
               className="object-cover"
             />
             {index === 0 && (
-              <span className="absolute left-0 top-0 bg-zinc-900 px-1 text-[10px] text-white">
+              <span className="absolute left-0 top-0 bg-foreground px-1 text-[10px] text-background">
                 Cover
               </span>
             )}
@@ -115,7 +115,7 @@ export function ItemPhotosEditor({
 
       {error && <p className="text-sm text-red-600">{error}</p>}
       {!atLimit && image.photos.length === 1 && (
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-muted">
           Add more photos so visitors can browse angles and details, like a
           product gallery.
         </p>

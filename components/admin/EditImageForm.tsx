@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import type { GalleryImageView } from "@/lib/gallery";
-import type { ImageMetadata } from "./ImageMetadataFields";
+import { usesPrintFieldSet } from "@/lib/category-utils";
+import type { ImageMetadata, ClientVocabulary } from "./ImageMetadataFields";
 import {
   emptyImageMetadata,
   ImageMetadataFields,
 } from "./ImageMetadataFields";
 import { ItemPhotosEditor } from "./ItemPhotosEditor";
-import type { Category } from "@/lib/types";
 
 function imageToMetadata(image: GalleryImageView): ImageMetadata {
   return {
@@ -20,18 +20,23 @@ function imageToMetadata(image: GalleryImageView): ImageMetadata {
     priceOnRequest: image.priceOnRequest ?? false,
     status: image.status,
     featured: image.featured ?? false,
+    homepageHero: image.homepageHero ?? false,
     collection: image.collection ?? "",
     slug: image.slug,
     caption: image.caption ?? "",
+    printSizes: image.printSizes ?? [],
+    printSurfaces: image.printSurfaces ?? [],
   };
 }
 
 type EditImageFormProps = {
   image: GalleryImageView;
+  vocabulary: ClientVocabulary;
   onSave: (
     id: string,
-    category: Category,
+    category: string,
     metadata: ImageMetadata,
+    categoryLabel?: string,
   ) => Promise<void>;
   onAddPhotos: (id: string, files: FileList) => Promise<void>;
   onRemovePhoto: (id: string, photoId: string) => Promise<void>;
@@ -40,31 +45,41 @@ type EditImageFormProps = {
 
 export function EditImageForm({
   image,
+  vocabulary,
   onSave,
   onAddPhotos,
   onRemovePhoto,
   onCancel,
 }: EditImageFormProps) {
-  const [category, setCategory] = useState<Category>(image.category);
+  const [category, setCategory] = useState(image.category);
+  const [categoryLabel, setCategoryLabel] = useState<string | undefined>();
   const [metadata, setMetadata] = useState<ImageMetadata>(() =>
     imageToMetadata(image),
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  function handleCategoryChange(slug: string, label?: string) {
+    setCategory(slug);
+    setCategoryLabel(label);
+  }
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setSaving(true);
     setError(null);
 
-    if (category === "painting" && !metadata.title.trim()) {
-      setError("Title is required for paintings.");
+    if (
+      !usesPrintFieldSet(category, vocabulary.categories) &&
+      !metadata.title.trim()
+    ) {
+      setError("Title is required for this category.");
       setSaving(false);
       return;
     }
 
     try {
-      await onSave(image.id, category, metadata);
+      await onSave(image.id, category, metadata, categoryLabel);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed");
       setSaving(false);
@@ -74,12 +89,12 @@ export function EditImageForm({
   return (
     <form
       onSubmit={(e) => void handleSubmit(e)}
-      className="space-y-4 border-t border-zinc-100 bg-zinc-50 px-4 py-4"
+      className="space-y-4 border-t border-border bg-surface px-4 py-4"
     >
-      <p className="text-sm font-medium text-zinc-900">
+      <p className="text-sm font-medium text-foreground">
         Edit details
         {image.title === "Untitled" && (
-          <span className="ml-2 font-normal text-zinc-500">
+          <span className="ml-2 font-normal text-muted">
             — add a title and price
           </span>
         )}
@@ -93,7 +108,8 @@ export function EditImageForm({
       <ImageMetadataFields
         category={category}
         metadata={metadata}
-        onCategoryChange={setCategory}
+        vocabulary={vocabulary}
+        onCategoryChange={handleCategoryChange}
         onChange={setMetadata}
         disabled={saving}
       />
@@ -102,7 +118,7 @@ export function EditImageForm({
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-60"
+          className="btn btn-primary"
         >
           {saving ? "Saving…" : "Save changes"}
         </button>
@@ -110,7 +126,7 @@ export function EditImageForm({
           type="button"
           onClick={onCancel}
           disabled={saving}
-          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm hover:bg-white"
+          className="btn btn-secondary"
         >
           Cancel
         </button>

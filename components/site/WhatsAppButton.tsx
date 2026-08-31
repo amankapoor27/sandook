@@ -1,3 +1,8 @@
+"use client";
+
+import { useSiteTheme } from "./SiteThemeProvider";
+import { trackAnalyticsEvent } from "@/lib/track-analytics";
+
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -17,6 +22,8 @@ type WhatsAppButtonProps = {
   label?: string;
   variant?: "fab" | "inline";
   className?: string;
+  trackSlug?: string;
+  trackGeneral?: boolean;
 };
 
 export function WhatsAppButton({
@@ -24,7 +31,21 @@ export function WhatsAppButton({
   label = "Chat on WhatsApp",
   variant = "inline",
   className = "",
+  trackSlug,
+  trackGeneral = false,
 }: WhatsAppButtonProps) {
+  const { theme } = useSiteTheme();
+
+  function handleClick() {
+    if (trackSlug) {
+      trackAnalyticsEvent("whatsapp_click", trackSlug);
+      return;
+    }
+    if (trackGeneral || variant === "fab") {
+      trackAnalyticsEvent("whatsapp_click");
+    }
+  }
+
   if (variant === "fab") {
     return (
       <a
@@ -32,19 +53,26 @@ export function WhatsAppButton({
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
-        className={`fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#20bd5a] ${className}`}
+        onClick={handleClick}
+        className={`fixed z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#20bd5a] bottom-[max(1.5rem,env(safe-area-inset-bottom))] right-[max(1.5rem,env(safe-area-inset-right))] ${className}`}
       >
         <WhatsAppIcon className="h-7 w-7" />
       </a>
     );
   }
 
+  const inlineClass =
+    theme === "dark"
+      ? "border-[#25D366] bg-[#25D366]/15 text-[#4ade80] hover:bg-[#25D366]/25"
+      : "border-[#25D366] bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/20";
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center gap-2 rounded-full border border-[#25D366] bg-[#25D366]/10 px-6 py-2.5 text-sm font-medium text-[#128C7E] transition-colors hover:bg-[#25D366]/20 ${className}`}
+      onClick={handleClick}
+      className={`inline-flex items-center gap-2 rounded-full border px-6 py-2.5 text-sm font-medium transition-colors ${inlineClass} ${className}`}
     >
       <WhatsAppIcon className="h-5 w-5" />
       {label}

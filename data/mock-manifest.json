@@ -1,155 +1,454 @@
 {
   "images": [
     {
-      "id": "4e3685fd71dc",
-      "slug": "night-lights",
-      "category": "painting",
-      "caption": "magical lights",
-      "title": "lamp",
-      "dimensions": "2*3",
-      "price": 600,
-      "priceOnRequest": false,
-      "status": "available",
-      "featured": false,
-      "thumbKey": "images/4e3685fd71dc/thumb.webp",
-      "fullKey": "images/4e3685fd71dc/full.webp",
-      "photos": [
-        {
-          "id": "primary",
-          "thumbKey": "images/4e3685fd71dc/thumb.webp",
-          "fullKey": "images/4e3685fd71dc/full.webp"
-        },
-        {
-          "id": "066f378b",
-          "thumbKey": "images/4e3685fd71dc/photos/066f378b/thumb.webp",
-          "fullKey": "images/4e3685fd71dc/photos/066f378b/full.webp"
-        },
-        {
-          "id": "78983d9e",
-          "thumbKey": "images/4e3685fd71dc/photos/78983d9e/thumb.webp",
-          "fullKey": "images/4e3685fd71dc/photos/78983d9e/full.webp"
-        }
-      ],
-      "uploadedAt": "2026-08-21T20:28:54.559Z"
-    },
-    {
-      "id": "ee865e96e09f",
-      "slug": "lady-god",
-      "category": "painting",
-      "title": "God",
-      "priceOnRequest": false,
-      "status": "available",
-      "featured": false,
-      "thumbKey": "images/ee865e96e09f/thumb.webp",
-      "fullKey": "images/ee865e96e09f/full.webp",
-      "photos": [
-        {
-          "id": "primary",
-          "thumbKey": "images/ee865e96e09f/thumb.webp",
-          "fullKey": "images/ee865e96e09f/full.webp"
-        }
-      ],
-      "uploadedAt": "2026-08-21T20:28:54.449Z"
-    },
-    {
-      "id": "e34b37532e81",
-      "slug": "untitled-4",
-      "category": "painting",
-      "title": "Untitled",
-      "priceOnRequest": false,
-      "status": "available",
-      "featured": false,
-      "thumbKey": "images/e34b37532e81/thumb.webp",
-      "fullKey": "images/e34b37532e81/full.webp",
-      "photos": [
-        {
-          "id": "primary",
-          "thumbKey": "images/e34b37532e81/thumb.webp",
-          "fullKey": "images/e34b37532e81/full.webp"
-        }
-      ],
-      "uploadedAt": "2026-08-21T20:28:54.339Z"
-    },
-    {
-      "id": "c887ccabbe59",
-      "slug": "untitled-3",
-      "category": "painting",
-      "title": "Untitled",
-      "priceOnRequest": false,
-      "status": "available",
-      "featured": false,
-      "thumbKey": "images/c887ccabbe59/thumb.webp",
-      "fullKey": "images/c887ccabbe59/full.webp",
-      "photos": [
-        {
-          "id": "primary",
-          "thumbKey": "images/c887ccabbe59/thumb.webp",
-          "fullKey": "images/c887ccabbe59/full.webp"
-        }
-      ],
-      "uploadedAt": "2026-08-21T20:28:54.247Z"
-    },
-    {
-      "id": "3c0d55cc071e",
-      "slug": "untitled-2",
-      "category": "painting",
-      "title": "Untitled",
-      "priceOnRequest": false,
-      "status": "available",
-      "featured": false,
-      "thumbKey": "images/3c0d55cc071e/thumb.webp",
-      "fullKey": "images/3c0d55cc071e/full.webp",
-      "photos": [
-        {
-          "id": "primary",
-          "thumbKey": "images/3c0d55cc071e/thumb.webp",
-          "fullKey": "images/3c0d55cc071e/full.webp"
-        }
-      ],
-      "uploadedAt": "2026-08-21T20:28:54.147Z"
-    },
-    {
-      "id": "84b426dab699",
-      "slug": "untitled",
-      "category": "painting",
-      "title": "Untitled",
-      "priceOnRequest": false,
-      "status": "available",
-      "featured": false,
-      "thumbKey": "images/84b426dab699/thumb.webp",
-      "fullKey": "images/84b426dab699/full.webp",
-      "photos": [
-        {
-          "id": "primary",
-          "thumbKey": "images/84b426dab699/thumb.webp",
-          "fullKey": "images/84b426dab699/full.webp"
-        }
-      ],
-      "uploadedAt": "2026-08-21T20:28:54.043Z"
-    },
-    {
-      "id": "c5e3d0176fb0",
-      "slug": "beauti-of-nature",
-      "category": "painting",
-      "title": "butterfly",
-      "medium": "pastel colors",
-      "dimensions": "4*6",
-      "year": 2026,
-      "price": 500,
+      "id": "ee3004158613",
+      "slug": "lost-and-found",
+      "category": "acrylic",
+      "title": "Lost and found",
+      "medium": "Acrylic",
+      "dimensions": "6\" x 4\"",
+      "year": 2025,
+      "price": 999,
       "priceOnRequest": false,
       "status": "available",
       "featured": true,
-      "collection": "nature elements",
-      "thumbKey": "images/c5e3d0176fb0/thumb.webp",
-      "fullKey": "images/c5e3d0176fb0/full.webp",
+      "homepageHero": false,
+      "collection": "Living life queen size",
+      "thumbKey": "images/ee3004158613/photos/bb9cf4a9/thumb.webp",
+      "fullKey": "images/ee3004158613/photos/bb9cf4a9/full.webp",
       "photos": [
         {
-          "id": "primary",
-          "thumbKey": "images/c5e3d0176fb0/thumb.webp",
-          "fullKey": "images/c5e3d0176fb0/full.webp"
+          "id": "bb9cf4a9",
+          "thumbKey": "images/ee3004158613/photos/bb9cf4a9/thumb.webp",
+          "fullKey": "images/ee3004158613/photos/bb9cf4a9/full.webp"
         }
       ],
-      "uploadedAt": "2026-08-21T20:23:57.773Z"
+      "uploadedAt": "2026-08-31T16:12:08.723Z"
+    },
+    {
+      "id": "8aa172953735",
+      "slug": "sunset",
+      "category": "watercolor",
+      "title": "Sunset",
+      "medium": "Watercolor",
+      "dimensions": "4\" x 3\"",
+      "year": 2025,
+      "price": 499,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Sunlit solitude",
+      "thumbKey": "images/8aa172953735/photos/24a6e5c3/thumb.webp",
+      "fullKey": "images/8aa172953735/photos/24a6e5c3/full.webp",
+      "photos": [
+        {
+          "id": "24a6e5c3",
+          "thumbKey": "images/8aa172953735/photos/24a6e5c3/thumb.webp",
+          "fullKey": "images/8aa172953735/photos/24a6e5c3/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T16:09:37.169Z"
+    },
+    {
+      "id": "a45ee693b772",
+      "slug": "chit-chat",
+      "category": "watercolor",
+      "title": "Chit-chat",
+      "medium": "Watercolor",
+      "dimensions": "4\" x 3\"",
+      "year": 2025,
+      "price": 499,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Sunlit solitude",
+      "thumbKey": "images/a45ee693b772/photos/aa45d39a/thumb.webp",
+      "fullKey": "images/a45ee693b772/photos/aa45d39a/full.webp",
+      "photos": [
+        {
+          "id": "aa45d39a",
+          "thumbKey": "images/a45ee693b772/photos/aa45d39a/thumb.webp",
+          "fullKey": "images/a45ee693b772/photos/aa45d39a/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T16:08:33.009Z"
+    },
+    {
+      "id": "692ba4ca2ccd",
+      "slug": "serenity",
+      "category": "watercolor",
+      "title": "Serenity",
+      "medium": "Watercolor",
+      "dimensions": "4\" x 3\"",
+      "year": 2025,
+      "price": 499,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Sunlit solitude",
+      "thumbKey": "images/692ba4ca2ccd/photos/f45be142/thumb.webp",
+      "fullKey": "images/692ba4ca2ccd/photos/f45be142/full.webp",
+      "photos": [
+        {
+          "id": "f45be142",
+          "thumbKey": "images/692ba4ca2ccd/photos/f45be142/thumb.webp",
+          "fullKey": "images/692ba4ca2ccd/photos/f45be142/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T16:06:23.804Z"
+    },
+    {
+      "id": "3e71e6112c52",
+      "slug": "seclusion",
+      "category": "watercolor",
+      "title": "Seclusion",
+      "medium": "Watercolor",
+      "dimensions": "8\" x 12\"",
+      "year": 2026,
+      "price": 999,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Tiny escapes",
+      "thumbKey": "images/3e71e6112c52/photos/63af121b/thumb.webp",
+      "fullKey": "images/3e71e6112c52/photos/63af121b/full.webp",
+      "photos": [
+        {
+          "id": "63af121b",
+          "thumbKey": "images/3e71e6112c52/photos/63af121b/thumb.webp",
+          "fullKey": "images/3e71e6112c52/photos/63af121b/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T16:03:23.730Z"
+    },
+    {
+      "id": "043cf4c1605f",
+      "slug": "smell-the-flowers",
+      "category": "watercolor",
+      "title": "Smell the flowers",
+      "medium": "Watercolor",
+      "dimensions": "6\" x 4\"",
+      "year": 2025,
+      "price": 996,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Living life queen size",
+      "thumbKey": "images/043cf4c1605f/photos/7787b16b/thumb.webp",
+      "fullKey": "images/043cf4c1605f/photos/7787b16b/full.webp",
+      "photos": [
+        {
+          "id": "7787b16b",
+          "thumbKey": "images/043cf4c1605f/photos/7787b16b/thumb.webp",
+          "fullKey": "images/043cf4c1605f/photos/7787b16b/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T16:02:36.369Z"
+    },
+    {
+      "id": "cede33d741d0",
+      "slug": "meadow",
+      "category": "watercolor",
+      "title": "Meadows",
+      "medium": "Watercolor",
+      "dimensions": "3\" x 3\"",
+      "year": 2026,
+      "price": 399,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": true,
+      "collection": "Sunlit solitude",
+      "thumbKey": "images/cede33d741d0/photos/07c701ad/thumb.webp",
+      "fullKey": "images/cede33d741d0/photos/07c701ad/full.webp",
+      "photos": [
+        {
+          "id": "07c701ad",
+          "thumbKey": "images/cede33d741d0/photos/07c701ad/thumb.webp",
+          "fullKey": "images/cede33d741d0/photos/07c701ad/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T16:01:53.091Z"
+    },
+    {
+      "id": "6a3cfb289a13",
+      "slug": "solitude-in-wild",
+      "category": "watercolor",
+      "title": "Solitude in wild",
+      "medium": "Watercolor",
+      "dimensions": "3\" x 3\"",
+      "year": 2026,
+      "price": 399,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": true,
+      "homepageHero": false,
+      "collection": "Sunlit solitude",
+      "thumbKey": "images/6a3cfb289a13/photos/ed146cd1/thumb.webp",
+      "fullKey": "images/6a3cfb289a13/photos/ed146cd1/full.webp",
+      "photos": [
+        {
+          "id": "ed146cd1",
+          "thumbKey": "images/6a3cfb289a13/photos/ed146cd1/thumb.webp",
+          "fullKey": "images/6a3cfb289a13/photos/ed146cd1/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T16:00:55.252Z"
+    },
+    {
+      "id": "5cf8735f7895",
+      "slug": "door-kahin",
+      "category": "watercolor",
+      "title": "Door-kahin",
+      "medium": "Watercolor",
+      "dimensions": "3\" x 3\"",
+      "year": 2026,
+      "price": 399,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Tiny escapes",
+      "thumbKey": "images/5cf8735f7895/photos/fe33c2c0/thumb.webp",
+      "fullKey": "images/5cf8735f7895/photos/fe33c2c0/full.webp",
+      "photos": [
+        {
+          "id": "fe33c2c0",
+          "thumbKey": "images/5cf8735f7895/photos/fe33c2c0/thumb.webp",
+          "fullKey": "images/5cf8735f7895/photos/fe33c2c0/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:59:42.791Z"
+    },
+    {
+      "id": "b45330158acb",
+      "slug": "ek-alag-sham",
+      "category": "watercolor",
+      "title": "Ek alag sham",
+      "medium": "Watercolor",
+      "dimensions": "3\" x 3\"",
+      "year": 2026,
+      "price": 399,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Sunlit solitude",
+      "thumbKey": "images/b45330158acb/photos/f779c4ff/thumb.webp",
+      "fullKey": "images/b45330158acb/photos/f779c4ff/full.webp",
+      "photos": [
+        {
+          "id": "f779c4ff",
+          "thumbKey": "images/b45330158acb/photos/f779c4ff/thumb.webp",
+          "fullKey": "images/b45330158acb/photos/f779c4ff/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:56:40.468Z"
+    },
+    {
+      "id": "17522c80ee00",
+      "slug": "power",
+      "category": "watercolor",
+      "title": "Power",
+      "medium": "Watercolor",
+      "dimensions": "6\" x 4\"",
+      "year": 2025,
+      "price": 999,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Spiritual",
+      "thumbKey": "images/17522c80ee00/photos/c031fd1a/thumb.webp",
+      "fullKey": "images/17522c80ee00/photos/c031fd1a/full.webp",
+      "photos": [
+        {
+          "id": "c031fd1a",
+          "thumbKey": "images/17522c80ee00/photos/c031fd1a/thumb.webp",
+          "fullKey": "images/17522c80ee00/photos/c031fd1a/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:55:22.527Z"
+    },
+    {
+      "id": "143cd08da652",
+      "slug": "sukoon",
+      "category": "watercolor",
+      "title": "Sukoon",
+      "medium": "Watercolor",
+      "dimensions": "3\" x 3\"",
+      "year": 2026,
+      "price": 399,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": true,
+      "homepageHero": false,
+      "collection": "Tiny escapes",
+      "thumbKey": "images/143cd08da652/photos/b97e6465/thumb.webp",
+      "fullKey": "images/143cd08da652/photos/b97e6465/full.webp",
+      "photos": [
+        {
+          "id": "b97e6465",
+          "thumbKey": "images/143cd08da652/photos/b97e6465/thumb.webp",
+          "fullKey": "images/143cd08da652/photos/b97e6465/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:53:55.675Z"
+    },
+    {
+      "id": "57cbacdb4dd3",
+      "slug": "deep-in-thoughts",
+      "category": "watercolor",
+      "title": "Deep in thought",
+      "medium": "Watercolor",
+      "dimensions": "6\" x 4\"",
+      "year": 2025,
+      "price": 999,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Living life queen size",
+      "thumbKey": "images/57cbacdb4dd3/photos/799c88cd/thumb.webp",
+      "fullKey": "images/57cbacdb4dd3/photos/799c88cd/full.webp",
+      "photos": [
+        {
+          "id": "799c88cd",
+          "thumbKey": "images/57cbacdb4dd3/photos/799c88cd/thumb.webp",
+          "fullKey": "images/57cbacdb4dd3/photos/799c88cd/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:52:29.354Z"
+    },
+    {
+      "id": "35f0fd984ab2",
+      "slug": "curly-girl",
+      "category": "watercolor",
+      "title": "Curly Girl",
+      "medium": "Watercolor",
+      "dimensions": "6\" x 4\"",
+      "year": 2025,
+      "price": 999,
+      "priceOnRequest": false,
+      "status": "sold",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Living life queen size",
+      "thumbKey": "images/35f0fd984ab2/photos/f56e1516/thumb.webp",
+      "fullKey": "images/35f0fd984ab2/photos/f56e1516/full.webp",
+      "photos": [
+        {
+          "id": "f56e1516",
+          "thumbKey": "images/35f0fd984ab2/photos/f56e1516/thumb.webp",
+          "fullKey": "images/35f0fd984ab2/photos/f56e1516/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:50:45.982Z"
+    },
+    {
+      "id": "e440329b6101",
+      "slug": "ganpati",
+      "category": "watercolor",
+      "title": "Ganpati",
+      "medium": "Watercolor",
+      "dimensions": "6\" x 4\"",
+      "year": 2025,
+      "price": 999,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Spiritual",
+      "thumbKey": "images/e440329b6101/photos/50fabf27/thumb.webp",
+      "fullKey": "images/e440329b6101/photos/50fabf27/full.webp",
+      "photos": [
+        {
+          "id": "50fabf27",
+          "thumbKey": "images/e440329b6101/photos/50fabf27/thumb.webp",
+          "fullKey": "images/e440329b6101/photos/50fabf27/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:49:44.800Z"
+    },
+    {
+      "id": "4f2d3066d337",
+      "slug": "red-gown",
+      "category": "watercolor",
+      "title": "Red Gown",
+      "medium": "Watercolor",
+      "dimensions": "2\" x 1.5\"",
+      "year": 2025,
+      "price": 299,
+      "priceOnRequest": false,
+      "status": "not_for_sale",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Living life queen size",
+      "thumbKey": "images/4f2d3066d337/photos/73630567/thumb.webp",
+      "fullKey": "images/4f2d3066d337/photos/73630567/full.webp",
+      "photos": [
+        {
+          "id": "73630567",
+          "thumbKey": "images/4f2d3066d337/photos/73630567/thumb.webp",
+          "fullKey": "images/4f2d3066d337/photos/73630567/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:48:35.602Z"
+    },
+    {
+      "id": "57f6d841b8a0",
+      "slug": "nazakat",
+      "category": "watercolor",
+      "title": "Nazakat",
+      "medium": "Watercolor",
+      "dimensions": "6\" x 4\"",
+      "year": 2025,
+      "price": 999,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Living life queen size",
+      "thumbKey": "images/57f6d841b8a0/photos/5b131023/thumb.webp",
+      "fullKey": "images/57f6d841b8a0/photos/5b131023/full.webp",
+      "photos": [
+        {
+          "id": "5b131023",
+          "thumbKey": "images/57f6d841b8a0/photos/5b131023/thumb.webp",
+          "fullKey": "images/57f6d841b8a0/photos/5b131023/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:46:21.529Z"
+    },
+    {
+      "id": "5024ba25f7b8",
+      "slug": "peace",
+      "category": "watercolor",
+      "title": "Peace",
+      "medium": "Watercolor",
+      "dimensions": "4\" x 3\"",
+      "year": 2025,
+      "price": 499,
+      "priceOnRequest": false,
+      "status": "available",
+      "featured": false,
+      "homepageHero": false,
+      "collection": "Monochromes",
+      "thumbKey": "images/5024ba25f7b8/photos/c1ebd3e2/thumb.webp",
+      "fullKey": "images/5024ba25f7b8/photos/c1ebd3e2/full.webp",
+      "photos": [
+        {
+          "id": "c1ebd3e2",
+          "thumbKey": "images/5024ba25f7b8/photos/c1ebd3e2/thumb.webp",
+          "fullKey": "images/5024ba25f7b8/photos/c1ebd3e2/full.webp"
+        }
+      ],
+      "uploadedAt": "2026-08-31T15:36:01.555Z"
     }
   ]
 }

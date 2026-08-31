@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { getExistingSlugs } from "@/lib/gallery";
+import { usesPrintFieldSet } from "@/lib/category-utils";
 import { metadataFromJson } from "@/lib/image-update";
 import { getManifest, removeImageFromManifest, updateImageInManifest } from "@/lib/manifest";
 import { slugify, uniqueSlug } from "@/lib/slug";
 import { deleteObject } from "@/lib/storage";
+import { getVocabulary, registerArtworkVocabulary } from "@/lib/vocabulary";
 import type { GalleryImage } from "@/lib/types";
 
 export async function PATCH(
@@ -21,6 +23,10 @@ export async function PATCH(
   const body = (await request.json()) as Record<string, unknown>;
   const parsed = metadataFromJson(body);
   const category = parsed.category ?? existing.category;
+  const vocabulary = await getVocabulary();
+  const isPrint = usesPrintFieldSet(category, vocabulary.categories);
+  const categoryLabel =
+    typeof body.categoryLabel === "string" ? body.categoryLabel.trim() : undefined;
 
   const titleFromBody =
     typeof body.title === "string" ? body.title.trim() : parsed.title?.trim();
@@ -52,9 +58,10 @@ export async function PATCH(
     title: finalTitle,
     slug,
     caption: parsed.caption ?? existing.caption,
+    homepageHero: parsed.homepageHero,
   };
 
-  if (category === "painting") {
+  if (!isPrint) {
     updates.medium = parsed.medium ?? existing.medium;
     updates.dimensions = parsed.dimensions ?? existing.dimensions;
     updates.year = parsed.year ?? existing.year;
@@ -63,6 +70,8 @@ export async function PATCH(
     updates.status = parsed.status;
     updates.featured = parsed.featured;
     updates.collection = parsed.collection ?? existing.collection;
+    updates.printSizes = undefined;
+    updates.printSurfaces = undefined;
   } else {
     updates.medium = undefined;
     updates.dimensions = undefined;
@@ -72,9 +81,11 @@ export async function PATCH(
     updates.status = "not_for_sale";
     updates.featured = false;
     updates.collection = undefined;
+    updates.printSizes = parsed.printSizes ?? existing.printSizes;
+    updates.printSurfaces = parsed.printSurfaces ?? existing.printSurfaces;
   }
 
-  if (category === "diy" && parsed.title) {
+  if (isPrint && parsed.title) {
     updates.title = parsed.title;
     if (typeof body.slug === "string" && body.slug.trim()) {
       updates.slug = slug;
@@ -87,6 +98,15 @@ export async function PATCH(
   }
 
   await updateImageInManifest(id, updates);
+
+  await registerArtworkVocabulary({
+    category,
+    categoryLabel,
+    medium: updates.medium,
+    dimensions: updates.dimensions,
+    year: updates.year,
+    collection: updates.collection,
+  });
 
   return NextResponse.json({ ok: true });
 }

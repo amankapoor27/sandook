@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f4ef;
-  --foreground: #2a2622;
-  --muted: #7a736c;
+  --background: #fafaf9;
+  --foreground: #18181b;
+  --muted: #71717a;
   --accent: #b8654a;
   --accent-hover: #9a5238;
-  --surface: #fdfcfa;
-  --border: #e5dfd6;
-  --line: #d9d1c7;
+  --surface: #ffffff;
+  --border: #e4e4e7;
+  --line: #d4d4d8;
 }
 
 @theme inline {
@@ -25,10 +25,284 @@
   --font-display: var(--font-cormorant);
 }
 
+@layer base {
+  html {
+    cursor: default;
+  }
+
+  body {
+    cursor: default;
+  }
+
+  button:not(:disabled),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  label[for],
+  select:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+
+  button:not(:disabled),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled) {
+    user-select: none;
+  }
+
+  button:disabled,
+  [type="button"]:disabled,
+  [type="submit"]:disabled {
+    cursor: not-allowed;
+  }
+
+  a[href] {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea {
+    cursor: text;
+    user-select: text;
+  }
+
+  .site-theme,
+  .admin-theme {
+    user-select: none;
+  }
+
+  .site-theme .select-text,
+  .site-theme p,
+  .site-theme li,
+  .site-theme dd,
+  .site-theme dt,
+  .site-theme blockquote,
+  .site-theme h1,
+  .site-theme h2,
+  .site-theme h3,
+  .site-theme .font-display,
+  .site-theme .prose-site,
+  .admin-theme input:not([type="checkbox"]):not([type="radio"]),
+  .admin-theme textarea,
+  .admin-theme .select-text,
+  .admin-theme .whitespace-pre-wrap {
+    user-select: text;
+    cursor: auto;
+  }
+
+  header,
+  nav,
+  footer,
+  figure,
+  figcaption,
+  button,
+  .btn {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    border-radius: 0.5rem;
+    padding: 0.4375rem 0.875rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease,
+      opacity 0.15s ease;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .btn-primary {
+    background: var(--foreground);
+    color: var(--background);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  .btn-secondary {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--foreground);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--surface);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--foreground);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--surface);
+  }
+
+  .btn-danger {
+    background: transparent;
+    color: #dc2626;
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    background: color-mix(in srgb, #ef4444 12%, transparent);
+  }
+
+  .btn-pill {
+    border-radius: 9999px;
+    padding: 0.5rem 1rem;
+  }
+
+  .btn-link {
+    padding: 0;
+    background: transparent;
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    white-space: normal;
+  }
+
+  .btn-link:hover:not(:disabled) {
+    color: var(--foreground);
+    background: transparent;
+  }
+
+  .artwork-backdrop {
+    border: none;
+    background: rgb(0 0 0 / 0.72);
+    cursor: pointer;
+  }
+
+  html[data-site-theme="light"] .artwork-backdrop {
+    background: rgb(247 244 239 / 0.94);
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.site-theme,
+.admin-theme {
+  display: flex;
+  min-height: 100%;
+  flex: 1;
+  flex-direction: column;
+  color-scheme: dark;
+  --background: #12100e;
+  --foreground: #f5f0ea;
+  --muted: #9a9189;
+  --accent: #d4846a;
+  --accent-hover: #e8997d;
+  --surface: #1c1916;
+  --border: #3d3833;
+  --line: #2e2a26;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.site-theme {
+  position: relative;
+  isolation: isolate;
+  background-image:
+    radial-gradient(
+      ellipse 110% 70% at 50% -15%,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 100% 35%,
+      color-mix(in srgb, var(--accent) 8%, transparent),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 0% 85%,
+      color-mix(in srgb, var(--accent) 7%, transparent),
+      transparent 48%
+    );
+  background-attachment: fixed;
+}
+
+.site-theme::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  mix-blend-mode: soft-light;
+}
+
+html[data-site-theme="light"] .site-theme,
+html[data-site-theme="light"] .admin-theme {
+  color-scheme: light;
+  --background: #f7f4ef;
+  --foreground: #2a2622;
+  --muted: #7a736c;
+  --accent: #b8654a;
+  --accent-hover: #9a5238;
+  --surface: #fdfcfa;
+  --border: #e5dfd6;
+  --line: #d9d1c7;
+}
+
+html[data-site-theme="light"] .site-theme {
+  background-image:
+    radial-gradient(
+      ellipse 110% 70% at 50% -15%,
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 55% 45% at 100% 30%,
+      color-mix(in srgb, var(--accent) 6%, transparent),
+      transparent 50%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface) 55%, var(--background)) 0%,
+      var(--background) 45%
+    );
+}
+
+html[data-site-theme="light"] .site-theme::before {
+  opacity: 0.2;
+  mix-blend-mode: multiply;
+}
+
+html[data-site-theme="dark"] .site-theme,
+html[data-site-theme="dark"] .admin-theme {
+  color-scheme: dark;
+  --background: #12100e;
+  --foreground: #f5f0ea;
+  --muted: #9a9189;
+  --accent: #d4846a;
+  --accent-hover: #e8997d;
+  --surface: #1c1916;
+  --border: #3d3833;
+  --line: #2e2a26;
 }
 
 .font-display {

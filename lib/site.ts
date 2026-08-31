@@ -5,7 +5,7 @@ export const siteConfig = {
   tagline: "Original paintings, made by hand",
   about: `Sandook Studio is a personal art practice rooted in colour, texture, and everyday inspiration. Each painting is an original work — layered, considered, and made by hand in the studio.
 
-This site is a living archive of finished pieces, works in progress, and the occasional DIY experiment that spills over from the easel.`,
+This site is a living archive of finished paintings, works in progress, and art prints available to order.`,
   commissions: {
     open: true,
     summary:
@@ -21,7 +21,7 @@ Typical turnaround is 4–8 weeks depending on size and complexity. A 50% deposi
     ],
   },
   instagram: "https://instagram.com/sandookstudio",
-  email: "hello@sandook.studio",
+  email: "hushedhues2025@gmail.com", //hello@sandook.studio
   /** International format, no + or spaces — e.g. 919876543210. Set via NEXT_PUBLIC_WHATSAPP_NUMBER. */
   get whatsapp() {
     return process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") ?? "";

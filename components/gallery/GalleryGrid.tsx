@@ -4,21 +4,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { GalleryImageView } from "@/lib/gallery";
+import { artworkHref, type GalleryCategoryFilter } from "@/lib/gallery-nav";
+import { usesPrintFieldSet, resolveCategoryLabel } from "@/lib/category-utils";
 import { formatPrice } from "@/lib/site";
+import type { VocabularyCategory } from "@/lib/types";
 import { Lightbox } from "./Lightbox";
 
 type GalleryGridProps = {
   images: GalleryImageView[];
-  variant: "work" | "diy" | "gallery";
+  variant: "work" | "print" | "gallery";
   onSelect?: (image: GalleryImageView) => void;
+  galleryCategory?: GalleryCategoryFilter;
   columns?: 3 | 4;
+  categories?: VocabularyCategory[];
 };
 
 export function GalleryGrid({
   images,
   variant,
   onSelect,
+  galleryCategory = "all",
   columns = 4,
+  categories = [],
 }: GalleryGridProps) {
   const [lightboxImage, setLightboxImage] = useState<GalleryImageView | null>(
     null,
@@ -36,14 +43,14 @@ export function GalleryGrid({
         <p className="mt-2 text-sm text-muted">
           {variant === "work"
             ? "Paintings will appear here once uploaded."
-            : "DIY projects will appear here once uploaded."}
+            : "Prints will appear here once uploaded."}
         </p>
       </div>
     );
   }
 
   function handleClick(image: GalleryImageView) {
-    if (variant === "diy") {
+    if (variant === "print") {
       if (onSelect) onSelect(image);
       else setLightboxImage(image);
     }
@@ -54,11 +61,11 @@ export function GalleryGrid({
   }
 
   function detailHref(image: GalleryImageView) {
-    return `/gallery/${image.slug}`;
+    return artworkHref(image.slug, galleryCategory);
   }
 
   function renderCaption(image: GalleryImageView) {
-    if (variant === "diy") {
+    if (variant === "print") {
       return (
         <figcaption className="mt-3">
           <p className="font-display text-lg text-foreground">{image.title}</p>
@@ -67,18 +74,20 @@ export function GalleryGrid({
     }
 
     const price = formatPrice(image.price, image.priceOnRequest);
+    const isPrint = usesPrintFieldSet(image.category, categories);
+    const categoryName = resolveCategoryLabel(image.category, categories);
 
     return (
       <figcaption className="mt-3 flex items-baseline justify-between gap-2">
         <div>
           <p className="font-display text-lg text-foreground">{image.title}</p>
-          {image.category === "diy" && (
+          {isPrint && (
             <p className="mt-0.5 text-[0.625rem] uppercase tracking-[0.14em] text-muted">
-              DIY
+              {categoryName}
             </p>
           )}
         </div>
-        {price && image.category === "painting" && (
+        {price && !isPrint && (
           <p
             className={`shrink-0 text-xs uppercase tracking-[0.1em] ${
               image.status === "sold" ? "text-muted line-through" : "text-muted"
@@ -102,10 +111,10 @@ export function GalleryGrid({
                 alt={image.title}
                 fill
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                className="object-contain p-1 transition-opacity duration-500 group-hover:opacity-90"
+                className="object-cover transition-opacity duration-500 group-hover:opacity-90"
               />
-              {variant !== "diy" &&
-                image.category === "painting" &&
+              {variant !== "print" &&
+                !usesPrintFieldSet(image.category, categories) &&
                 image.status === "sold" && (
                 <span className="absolute right-3 top-3 bg-background/90 px-2 py-1 text-[0.625rem] font-medium uppercase tracking-[0.12em] text-muted">
                   Sold
@@ -130,7 +139,7 @@ export function GalleryGrid({
               <button
                 type="button"
                 onClick={() => handleClick(image)}
-                className="group block w-full cursor-pointer text-left"
+                className="group block w-full text-left"
               >
                 {imageBlock}
                 {renderCaption(image)}
@@ -140,7 +149,7 @@ export function GalleryGrid({
         })}
       </div>
 
-      {variant === "diy" && !onSelect && (
+      {variant === "print" && !onSelect && (
         <Lightbox
           image={lightboxImage}
           onClose={() => setLightboxImage(null)}
