@@ -1,6 +1,6 @@
-import sharp from "sharp";
+import sharp, { type ResizeOptions } from "sharp";
 import { ALLOWED_MIME_TYPES, MAX_FILE_SIZE_BYTES } from "./constants";
-import type { Category } from "./types";
+import { applyWatermark } from "./watermark";
 
 export type ProcessedImage = {
   thumb: Buffer;
@@ -21,35 +21,60 @@ export function validateUploadFile(
   return { ok: true };
 }
 
-export async function processImage(buffer: Buffer): Promise<ProcessedImage> {
-  const full = await sharp(buffer)
+export async function validateImageBuffer(
+  buffer: Buffer,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    const metadata = await sharp(buffer).metadata();
+    if (!metadata.width || !metadata.height) {
+      return { ok: false, error: "Invalid image file." };
+    }
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Invalid image file." };
+  }
+}
+
+async function encodeVariant(
+  buffer: Buffer,
+  resize: ResizeOptions,
+  quality: number,
+): Promise<Buffer> {
+  const resized = await sharp(buffer)
     .rotate()
-    .resize({ width: 2000, height: 2000, fit: "inside", withoutEnlargement: true })
-    .webp({ quality: 85 })
+    .resize(resize)
+    .webp({ quality })
     .toBuffer();
 
-  const thumb = await sharp(buffer)
-    .rotate()
-    .resize({
-      width: 400,
-      height: 400,
-      fit: "contain",
-      background: { r: 217, g: 209, b: 199, alpha: 1 },
-    })
-    .webp({ quality: 80 })
-    .toBuffer();
+  return applyWatermark(resized);
+}
+
+export async function processImage(buffer: Buffer): Promise<ProcessedImage> {
+  const validation = await validateImageBuffer(buffer);
+  if (!validation.ok) {
+    throw new Error(validation.error);
+  }
+
+  const [full, thumb] = await Promise.all([
+    encodeVariant(
+      buffer,
+      { width: 2000, height: 2000, fit: "inside", withoutEnlargement: true },
+      85,
+    ),
+    // 3:2 matches gallery grid aspect (sm+); object-cover in GalleryGrid crops to fit.
+    encodeVariant(
+      buffer,
+      {
+        width: 600,
+        height: 400,
+        fit: "cover",
+        position: "centre",
+      },
+      80,
+    ),
+  ]);
 
   return { thumb, full };
-}
-
-export function parseCategory(value: FormDataEntryValue | null): Category {
-  return value === "diy" ? "diy" : "painting";
-}
-
-export function parseCaption(value: FormDataEntryValue | null): string | undefined {
-  if (typeof value !== "string") return undefined;
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed.slice(0, 200) : undefined;
 }
 
 export function createImageId(): string {

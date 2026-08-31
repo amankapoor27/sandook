@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { GalleryImageView } from "@/lib/gallery";
+import { artworkHref } from "@/lib/gallery-nav";
 import { formatPrice, siteConfig } from "@/lib/site";
 
 type HeroProps = {
@@ -17,8 +18,7 @@ export function Hero({ featured }: HeroProps) {
             {siteConfig.tagline}
           </h1>
           <p className="text-[0.9375rem] leading-[1.75] text-muted">
-            Paintings from the studio, and the occasional DIY piece made by
-            hand.
+            Paintings from the studio, plus fine art prints in multiple sizes.
           </p>
           <div className="flex items-center gap-6 pt-2">
             <Link
@@ -39,7 +39,7 @@ export function Hero({ featured }: HeroProps) {
         {featured ? (
           <figure className="space-y-4">
             <Link
-              href={`/gallery/${featured.slug}`}
+              href={artworkHref(featured.slug, featured.category)}
               className="group relative block aspect-[4/3] overflow-hidden bg-line sm:aspect-[3/2]"
             >
               <Image
@@ -48,7 +48,7 @@ export function Hero({ featured }: HeroProps) {
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 45vw"
-                className="object-contain p-2 transition-opacity duration-700 group-hover:opacity-95"
+                className="object-cover transition-opacity duration-700 group-hover:opacity-95"
               />
             </Link>
             <figcaption className="flex items-baseline justify-between gap-4 border-t border-line pt-4">

@@ -1,8 +1,9 @@
+import { orderedCollectionNames, sortImagesByCollection } from "./collection-order";
 import { getManifest } from "./manifest";
+import { usesPrintFieldSet } from "./category-utils";
+import { getVocabulary } from "./vocabulary";
 import { getPublicUrl } from "./storage";
 import type { ArtworkStatus, GalleryImage, ItemPhoto } from "./types";
-
-export { normalizeImage } from "./normalize-image";
 
 export type ItemPhotoView = {
   id: string;
@@ -23,10 +24,13 @@ export type GalleryImageView = {
   priceOnRequest?: boolean;
   status: ArtworkStatus;
   featured?: boolean;
+  homepageHero?: boolean;
   collection?: string;
   thumbUrl: string;
   fullUrl: string;
   photos: ItemPhotoView[];
+  printSizes?: string[];
+  printSurfaces?: string[];
   uploadedAt: string;
 };
 
@@ -55,7 +59,10 @@ function toView(image: GalleryImage): GalleryImageView {
     priceOnRequest: image.priceOnRequest,
     status: image.status,
     featured: image.featured,
+    homepageHero: image.homepageHero,
     collection: image.collection,
+    printSizes: image.printSizes,
+    printSurfaces: image.printSurfaces,
     thumbUrl: primary?.thumbUrl ?? getPublicUrl(image.thumbKey),
     fullUrl: primary?.fullUrl ?? getPublicUrl(image.fullKey),
     photos,
@@ -63,30 +70,17 @@ function toView(image: GalleryImage): GalleryImageView {
   };
 }
 
-function sortByDate(images: GalleryImage[]): GalleryImage[] {
-  return [...images].sort(
-    (a, b) =>
-      new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime(),
-  );
+async function getSortedGalleryImages(): Promise<GalleryImage[]> {
+  const [manifest, vocabulary] = await Promise.all([
+    getManifest(),
+    getVocabulary(),
+  ]);
+  return sortImagesByCollection(manifest.images, vocabulary);
 }
 
 export async function getGalleryImages(): Promise<GalleryImageView[]> {
-  const manifest = await getManifest();
-  return sortByDate(manifest.images).map(toView);
-}
-
-export async function getPaintings(): Promise<GalleryImageView[]> {
-  const manifest = await getManifest();
-  return sortByDate(manifest.images.filter((img) => img.category === "painting")).map(
-    toView,
-  );
-}
-
-export async function getDiyProjects(): Promise<GalleryImageView[]> {
-  const manifest = await getManifest();
-  return sortByDate(manifest.images.filter((img) => img.category === "diy")).map(
-    toView,
-  );
+  const images = await getSortedGalleryImages();
+  return images.map(toView);
 }
 
 export async function getFeaturedImages(): Promise<GalleryImageView[]> {
@@ -96,11 +90,10 @@ export async function getFeaturedImages(): Promise<GalleryImageView[]> {
   return all.slice(0, 6);
 }
 
-export async function getFeaturedPaintings(): Promise<GalleryImageView[]> {
-  const paintings = await getPaintings();
-  const featured = paintings.filter((img) => img.featured);
-  if (featured.length > 0) return featured.slice(0, 6);
-  return paintings.slice(0, 6);
+export async function getHomepageHeroImage(): Promise<GalleryImageView | null> {
+  const manifest = await getManifest();
+  const hero = manifest.images.find((image) => image.homepageHero);
+  return hero ? toView(hero) : null;
 }
 
 export async function getArtworkBySlug(
@@ -126,14 +119,20 @@ export async function getAdjacentArtwork(slug: string): Promise<{
 }
 
 export async function getCollections(): Promise<string[]> {
-  const manifest = await getManifest();
-  const collections = new Set<string>();
+  const [manifest, vocabulary] = await Promise.all([
+    getManifest(),
+    getVocabulary(),
+  ]);
+  const collections: string[] = [];
   for (const image of manifest.images) {
-    if (image.category === "painting" && image.collection?.trim()) {
-      collections.add(image.collection.trim());
+    if (
+      !usesPrintFieldSet(image.category, vocabulary.categories) &&
+      image.collection?.trim()
+    ) {
+      collections.push(image.collection.trim());
     }
   }
-  return [...collections].sort((a, b) => a.localeCompare(b));
+  return orderedCollectionNames(vocabulary, collections);
 }
 
 export async function getExistingSlugs(): Promise<string[]> {

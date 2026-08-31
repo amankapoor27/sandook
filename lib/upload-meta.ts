@@ -1,8 +1,7 @@
-import type { ArtworkStatus, Category } from "./types";
+import { parseCategory } from "./categories";
+import type { ArtworkStatus } from "./types";
 
-export function parseCategory(value: FormDataEntryValue | null): Category {
-  return value === "diy" ? "diy" : "painting";
-}
+export { parseCategory };
 
 export function parseCaption(value: FormDataEntryValue | null): string | undefined {
   if (typeof value !== "string") return undefined;
@@ -64,6 +63,23 @@ export function parseSlug(value: FormDataEntryValue | null): string | undefined 
   return trimmed.length > 0 ? trimmed.slice(0, 120) : undefined;
 }
 
+export function parseStringArray(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const items = value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return items.length > 0 ? items : undefined;
+}
+
+export function parseStringArrayFromForm(form: FormData, key: string): string[] {
+  return form
+    .getAll(key)
+    .filter((entry): entry is string => typeof entry === "string")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
 export type ArtworkMetadata = {
   title?: string;
   medium?: string;
@@ -73,12 +89,18 @@ export type ArtworkMetadata = {
   priceOnRequest: boolean;
   status: ArtworkStatus;
   featured: boolean;
+  homepageHero: boolean;
   collection?: string;
   slug?: string;
   caption?: string;
+  printSizes?: string[];
+  printSurfaces?: string[];
 };
 
 export function parseArtworkMetadata(form: FormData): ArtworkMetadata {
+  const printSizes = parseStringArrayFromForm(form, "printSizes");
+  const printSurfaces = parseStringArrayFromForm(form, "printSurfaces");
+
   return {
     title: parseTitle(form.get("title")),
     medium: parseMedium(form.get("medium")),
@@ -88,8 +110,11 @@ export function parseArtworkMetadata(form: FormData): ArtworkMetadata {
     priceOnRequest: parseBoolean(form.get("priceOnRequest")),
     status: parseStatus(form.get("status")),
     featured: parseBoolean(form.get("featured")),
+    homepageHero: parseBoolean(form.get("homepageHero")),
     collection: parseCollection(form.get("collection")),
     slug: parseSlug(form.get("slug")),
     caption: parseCaption(form.get("caption")),
+    printSizes: printSizes.length > 0 ? printSizes : undefined,
+    printSurfaces: printSurfaces.length > 0 ? printSurfaces : undefined,
   };
 }

@@ -1,22 +1,20 @@
 import { AboutSnippet } from "@/components/home/AboutSnippet";
 import { FeaturedWork } from "@/components/home/FeaturedWork";
 import { Hero } from "@/components/home/Hero";
-import { getFeaturedImages, getGalleryImages } from "@/lib/gallery";
+import { readPageReferrerSource } from "@/lib/analytics-referrer";
+import { recordHomepageView } from "@/lib/analytics";
+import { getFeaturedImages, getHomepageHeroImage } from "@/lib/gallery";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [featured, allImages] = await Promise.all([
+  const [heroPiece, featured, source] = await Promise.all([
+    getHomepageHeroImage(),
     getFeaturedImages(),
-    getGalleryImages(),
+    readPageReferrerSource(),
   ]);
 
-  const heroPiece =
-    featured.find((img) => img.category === "painting") ??
-    featured[0] ??
-    allImages.find((img) => img.category === "painting") ??
-    allImages[0] ??
-    null;
+  await recordHomepageView(source);
 
   return (
     <>

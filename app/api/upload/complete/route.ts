@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { getExistingSlugs } from "@/lib/gallery";
-import {
-  createImageId,
-  parseCategory,
-  validateUploadFile,
-} from "@/lib/images";
+import { parseCategory } from "@/lib/categories";
+import { createImageId, validateUploadFile } from "@/lib/images";
 import { storePhotoFiles } from "@/lib/item-photos";
 import { addImageToManifest } from "@/lib/manifest";
 import { syncPrimaryPhoto } from "@/lib/normalize-image";
@@ -17,12 +14,14 @@ import {
 } from "@/lib/storage";
 import type { ArtworkMetadata } from "@/lib/upload-meta";
 import { parseArtworkMetadata } from "@/lib/upload-meta";
+import { registerArtworkVocabulary } from "@/lib/vocabulary";
 import type { Category, GalleryImage, ItemPhoto } from "@/lib/types";
 
 type CompleteBody = {
   uploadId?: string;
   tempKey?: string;
   category?: Category;
+  categoryLabel?: string;
   caption?: string;
   title?: string;
   medium?: string;
@@ -32,8 +31,11 @@ type CompleteBody = {
   priceOnRequest?: boolean;
   status?: GalleryImage["status"];
   featured?: boolean;
+  homepageHero?: boolean;
   collection?: string;
   slug?: string;
+  printSizes?: string[];
+  printSurfaces?: string[];
 };
 
 async function buildImageRecord(
@@ -61,7 +63,10 @@ async function buildImageRecord(
     priceOnRequest: metadata.priceOnRequest,
     status: metadata.status,
     featured: metadata.featured,
+    homepageHero: metadata.homepageHero,
     collection: metadata.collection,
+    printSizes: metadata.printSizes,
+    printSurfaces: metadata.printSurfaces,
     thumbKey: primary.thumbKey,
     fullKey: primary.fullKey,
     photos,
@@ -74,6 +79,7 @@ async function createGalleryItem(
   category: Category,
   metadata: ArtworkMetadata,
   sourceBuffers: Buffer[],
+  categoryLabel?: string,
 ) {
   const photos: ItemPhoto[] = [];
 
@@ -84,6 +90,15 @@ async function createGalleryItem(
 
   const image = await buildImageRecord(uploadId, category, metadata, photos);
   await addImageToManifest(image);
+
+  await registerArtworkVocabulary({
+    category,
+    categoryLabel,
+    medium: metadata.medium,
+    dimensions: metadata.dimensions,
+    year: metadata.year,
+    collection: metadata.collection,
+  });
 
   return {
     ...image,
@@ -107,9 +122,12 @@ function metadataFromBody(body: CompleteBody): ArtworkMetadata {
     priceOnRequest: body.priceOnRequest ?? false,
     status: body.status ?? "available",
     featured: body.featured ?? false,
+    homepageHero: body.homepageHero ?? false,
     collection: body.collection,
     slug: body.slug,
     caption: body.caption,
+    printSizes: body.printSizes,
+    printSurfaces: body.printSurfaces,
   };
 }
 
@@ -141,7 +159,18 @@ export async function POST(request: Request) {
       files.map((file) => file.arrayBuffer().then((ab) => Buffer.from(ab))),
     );
 
-    const image = await createGalleryItem(uploadId, category, metadata, buffers);
+    const categoryLabel =
+      typeof form.get("categoryLabel") === "string"
+        ? form.get("categoryLabel")?.toString().trim() || undefined
+        : undefined;
+
+    const image = await createGalleryItem(
+      uploadId,
+      category,
+      metadata,
+      buffers,
+      categoryLabel,
+    );
     return NextResponse.json({ image });
   }
 
@@ -162,7 +191,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const category = body.category === "diy" ? "diy" : "painting";
+  const category = parseCategory(body.category);
   const metadata = metadataFromBody(body);
 
   const image = await createGalleryItem(
@@ -170,6 +199,7 @@ export async function POST(request: Request) {
     category,
     metadata,
     [sourceBuffer],
+    body.categoryLabel?.trim(),
   );
 
   await deleteObject(body.tempKey);

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import { SiteThemeProvider } from "@/components/site/SiteThemeProvider";
 import { siteConfig } from "@/lib/site";
+import { themeInitScript } from "@/lib/theme-init";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,7 +38,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        {children}
+        <Script id="site-theme-init" strategy="beforeInteractive">
+          {themeInitScript}
+        </Script>
+        <SiteThemeProvider>{children}</SiteThemeProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { InquiryType } from "@/lib/types";
 
 type InquiryFormProps = {
@@ -22,6 +22,7 @@ export function InquiryForm({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const [artworkSlug] = useState(
     searchParams.get("slug") ?? initialSlug ?? "",
   );
@@ -47,6 +48,7 @@ export function InquiryForm({
           name,
           email,
           message,
+          _sandook_hp: honeypotRef.current?.value || undefined,
           artworkSlug: artworkSlug || undefined,
           artworkTitle: artworkTitle || undefined,
         }),
@@ -87,7 +89,11 @@ export function InquiryForm({
   }
 
   return (
-    <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
+    <form
+      onSubmit={(e) => void handleSubmit(e)}
+      className="relative space-y-5"
+      autoComplete="off"
+    >
       {artworkTitle && (
         <p className="rounded-lg bg-accent/10 px-4 py-3 text-sm text-foreground">
           Inquiring about: <strong>{artworkTitle}</strong>
@@ -99,7 +105,7 @@ export function InquiryForm({
         <select
           value={type}
           onChange={(e) => setType(e.target.value as InquiryType)}
-          className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-foreground"
         >
           <option value="general">General question</option>
           <option value="purchase">Purchase inquiry</option>
@@ -115,7 +121,7 @@ export function InquiryForm({
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2"
+            className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-foreground"
           />
         </label>
         <label className="block text-sm font-medium text-foreground">
@@ -125,7 +131,7 @@ export function InquiryForm({
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2"
+            className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-foreground"
           />
         </label>
       </div>
@@ -137,12 +143,23 @@ export function InquiryForm({
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-foreground placeholder:text-muted"
           placeholder="Tell me about your interest, preferred size, timeline…"
         />
       </label>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      <input
+        ref={honeypotRef}
+        type="text"
+        name="_sandook_hp"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        defaultValue=""
+        className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+      />
+
+      {error && <p className="text-sm text-red-400">{error}</p>}
 
       <button
         type="submit"

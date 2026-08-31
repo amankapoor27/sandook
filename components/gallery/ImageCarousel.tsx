@@ -52,7 +52,7 @@ export function ImageCarousel({ photos, title }: ImageCarouselProps) {
               type="button"
               onClick={() => goTo(index - 1)}
               aria-label="Previous photo"
-              className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground opacity-0 shadow-sm transition-opacity group-hover:opacity-100 hover:bg-background"
+              className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition-opacity hover:bg-background sm:left-3 sm:opacity-0 sm:group-hover:opacity-100"
             >
               ←
             </button>
@@ -60,7 +60,7 @@ export function ImageCarousel({ photos, title }: ImageCarouselProps) {
               type="button"
               onClick={() => goTo(index + 1)}
               aria-label="Next photo"
-              className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground opacity-0 shadow-sm transition-opacity group-hover:opacity-100 hover:bg-background"
+              className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition-opacity hover:bg-background sm:right-3 sm:opacity-0 sm:group-hover:opacity-100"
             >
               →
             </button>
@@ -91,7 +91,7 @@ export function ImageCarousel({ photos, title }: ImageCarouselProps) {
                 alt=""
                 fill
                 sizes="64px"
-                className="object-contain"
+                className="object-cover"
               />
             </button>
           ))}
