@@ -1,39 +1,43 @@
-import sharp from "sharp";
+import type { PhotonImage } from "@cf-wasm/photon/workerd";
+import { getPhoton } from "./photon";
+import { isCloudflareWorkers } from "./runtime";
 
 const WATERMARK_TEXT = "Sandook studio";
 
-function buildWatermarkSvg(width: number, height: number): string {
+export async function ensurePhoton(): Promise<void> {
+  await getPhoton();
+}
+
+export async function applyWatermarkToImageAsync(image: PhotonImage): Promise<void> {
+  // draw_text_with_color needs fonts that are not available on Workers (Rust null pointer).
+  if (isCloudflareWorkers()) return;
+  const { Rgba, draw_text_with_color } = await getPhoton();
+  const width = image.get_width();
+  const height = image.get_height();
+  if (!width || !height) return;
+
+  const fontSize = Math.max(16, Math.min(28, Math.round(width / 28)));
+  const color = new Rgba(255, 255, 255, 66);
+
   const tileWidth = 260;
   const tileHeight = 110;
-  const fontSize = Math.max(16, Math.min(28, Math.round(width / 28)));
-
-  return `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <pattern id="wm" width="${tileWidth}" height="${tileHeight}" patternUnits="userSpaceOnUse" patternTransform="rotate(-32)">
-      <text
-        x="12"
-        y="58"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="${fontSize}"
-        fill="#ffffff"
-        fill-opacity="0.26"
-        letter-spacing="0.08em"
-      >${WATERMARK_TEXT}</text>
-    </pattern>
-  </defs>
-  <rect width="100%" height="100%" fill="url(#wm)" />
-</svg>`;
+  for (let y = -tileHeight; y < height + tileHeight; y += tileHeight) {
+    for (let x = -tileWidth; x < width + tileWidth; x += tileWidth) {
+      draw_text_with_color(
+        image,
+        WATERMARK_TEXT,
+        x + 12,
+        y + 58,
+        fontSize,
+        color,
+      );
+    }
+  }
 }
 
 export async function applyWatermark(buffer: Buffer): Promise<Buffer> {
-  const image = sharp(buffer);
-  const { width, height } = await image.metadata();
-
-  if (!width || !height) return buffer;
-
-  const svg = buildWatermarkSvg(width, height);
-
-  return image
-    .composite([{ input: Buffer.from(svg), top: 0, left: 0 }])
-    .toBuffer();
+  const { PhotonImage } = await getPhoton();
+  const image = PhotonImage.new_from_byteslice(new Uint8Array(buffer));
+  await applyWatermarkToImageAsync(image);
+  return Buffer.from(image.get_bytes_webp());
 }

@@ -1,4 +1,5 @@
 import { AdminClient } from "@/components/admin/AdminClient";
+import { normalizeAdminGalleryImages } from "@/lib/admin-gallery";
 import { getGalleryImages } from "@/lib/gallery";
 import { syncVocabularyFromManifest } from "@/lib/vocabulary";
 
@@ -9,6 +10,9 @@ export default async function AdminPage() {
   ]);
 
   return (
-    <AdminClient initialImages={images} initialVocabulary={vocabulary} />
+    <AdminClient
+      initialImages={normalizeAdminGalleryImages(images)}
+      initialVocabulary={vocabulary}
+    />
   );
 }

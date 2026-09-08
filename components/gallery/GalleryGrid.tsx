@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { AppImage } from "@/components/AppImage";
 import Link from "next/link";
 import { useState } from "react";
 import type { GalleryImageView } from "@/lib/gallery";
@@ -106,7 +106,7 @@ export function GalleryGrid({
         {images.map((image) => {
           const imageBlock = (
             <div className="relative aspect-[4/3] overflow-hidden bg-line sm:aspect-[3/2]">
-              <Image
+              <AppImage
                 src={image.fullUrl}
                 alt={image.title}
                 fill

@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect } from "react";
+import { AppImage } from "@/components/AppImage";
+import { useEffect, useRef } from "react";
 import { EditImageForm } from "@/components/admin/EditImageForm";
 import type {
   ClientVocabulary,
@@ -48,11 +48,19 @@ export function UploadList({
   onAddPhotos,
   onRemovePhoto,
 }: UploadListProps) {
+  const rowRefs = useRef<Map<string, HTMLLIElement>>(new Map());
+
   useEffect(() => {
     if (editingId && !images.some((img) => img.id === editingId)) {
       onEditingIdChange(null);
     }
   }, [editingId, images, onEditingIdChange]);
+
+  useEffect(() => {
+    if (!editingId) return;
+    const row = rowRefs.current.get(editingId);
+    row?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [editingId, images]);
 
   if (images.length === 0) {
     return (
@@ -70,10 +78,16 @@ export function UploadList({
         const isPrint = usesPrintFieldSet(image.category, vocabulary.categories);
 
         return (
-          <li key={image.id}>
+          <li
+            key={image.id}
+            ref={(node) => {
+              if (node) rowRefs.current.set(image.id, node);
+              else rowRefs.current.delete(image.id);
+            }}
+          >
             <div className="flex items-center gap-4 px-4 py-3">
               <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-surface">
-                <Image
+                <AppImage
                   src={image.thumbUrl}
                   alt={image.title}
                   fill

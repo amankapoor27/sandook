@@ -6,6 +6,7 @@ import { storePhotoFiles } from "@/lib/item-photos";
 import { addImageToManifest } from "@/lib/manifest";
 import { syncPrimaryPhoto } from "@/lib/normalize-image";
 import { uniqueSlug } from "@/lib/slug";
+import { getUploadFiles } from "@/lib/form-data-files";
 import {
   getObject,
   deleteObject,
@@ -135,74 +136,83 @@ export async function POST(request: Request) {
   const contentType = request.headers.get("content-type") ?? "";
   const mode = getStorageMode();
 
-  if (contentType.includes("multipart/form-data")) {
-    const form = await request.formData();
-    const files = form
-      .getAll("file")
-      .filter((entry): entry is File => entry instanceof File);
+  try {
+    if (contentType.includes("multipart/form-data")) {
+      const form = await request.formData();
+      const files = getUploadFiles(form);
 
-    if (files.length === 0) {
-      return NextResponse.json({ error: "Missing file" }, { status: 400 });
-    }
-
-    for (const file of files) {
-      const validation = validateUploadFile(file);
-      if (!validation.ok) {
-        return NextResponse.json({ error: validation.error }, { status: 400 });
+      if (files.length === 0) {
+        return NextResponse.json({ error: "Missing file" }, { status: 400 });
       }
+
+      for (const file of files) {
+        const validation = validateUploadFile(file);
+        if (!validation.ok) {
+          return NextResponse.json({ error: validation.error }, { status: 400 });
+        }
+      }
+
+      const uploadId = createImageId();
+      const category = parseCategory(form.get("category"));
+      const metadata = parseArtworkMetadata(form);
+      const buffers = await Promise.all(
+        files.map((file) => file.arrayBuffer().then((ab) => Buffer.from(ab))),
+      );
+
+      const categoryLabel =
+        typeof form.get("categoryLabel") === "string"
+          ? form.get("categoryLabel")?.toString().trim() || undefined
+          : undefined;
+
+      const image = await createGalleryItem(
+        uploadId,
+        category,
+        metadata,
+        buffers,
+        categoryLabel,
+      );
+      return NextResponse.json({ image });
     }
 
-    const uploadId = createImageId();
-    const category = parseCategory(form.get("category"));
-    const metadata = parseArtworkMetadata(form);
-    const buffers = await Promise.all(
-      files.map((file) => file.arrayBuffer().then((ab) => Buffer.from(ab))),
-    );
+    const body = (await request.json()) as CompleteBody;
 
-    const categoryLabel =
-      typeof form.get("categoryLabel") === "string"
-        ? form.get("categoryLabel")?.toString().trim() || undefined
-        : undefined;
+    if (mode !== "r2" || !body.uploadId || !body.tempKey) {
+      return NextResponse.json(
+        { error: "R2 complete requires uploadId and tempKey" },
+        { status: 400 },
+      );
+    }
+
+    const sourceBuffer = await getObject(body.tempKey);
+    if (!sourceBuffer) {
+      return NextResponse.json(
+        { error: "Uploaded file not found" },
+        { status: 404 },
+      );
+    }
+
+    const category = parseCategory(body.category);
+    const metadata = metadataFromBody(body);
 
     const image = await createGalleryItem(
-      uploadId,
+      body.uploadId,
       category,
       metadata,
-      buffers,
-      categoryLabel,
+      [sourceBuffer],
+      body.categoryLabel?.trim(),
     );
+
+    await deleteObject(body.tempKey);
+
     return NextResponse.json({ image });
+  } catch (error) {
+    console.error("Upload complete failed:", error);
+    const message =
+      error instanceof Error ? error.message : "Upload failed";
+    const status =
+      message.includes("not found") || message.includes("Invalid")
+        ? 400
+        : 500;
+    return NextResponse.json({ error: message }, { status });
   }
-
-  const body = (await request.json()) as CompleteBody;
-
-  if (mode !== "r2" || !body.uploadId || !body.tempKey) {
-    return NextResponse.json(
-      { error: "R2 complete requires uploadId and tempKey" },
-      { status: 400 },
-    );
-  }
-
-  const sourceBuffer = await getObject(body.tempKey);
-  if (!sourceBuffer) {
-    return NextResponse.json(
-      { error: "Uploaded file not found" },
-      { status: 404 },
-    );
-  }
-
-  const category = parseCategory(body.category);
-  const metadata = metadataFromBody(body);
-
-  const image = await createGalleryItem(
-    body.uploadId,
-    category,
-    metadata,
-    [sourceBuffer],
-    body.categoryLabel?.trim(),
-  );
-
-  await deleteObject(body.tempKey);
-
-  return NextResponse.json({ image });
 }

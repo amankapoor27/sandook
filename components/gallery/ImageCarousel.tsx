@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { AppImage } from "@/components/AppImage";
 import { useCallback, useEffect, useState } from "react";
 import type { ItemPhotoView } from "@/lib/gallery";
 
@@ -36,7 +36,7 @@ export function ImageCarousel({ photos, title }: ImageCarouselProps) {
   return (
     <div className="space-y-4">
       <div className="group relative aspect-[4/3] w-full overflow-hidden bg-line sm:aspect-[3/2] lg:aspect-auto lg:h-[min(70vh,720px)] lg:min-h-[360px]">
-        <Image
+        <AppImage
           key={current.id}
           src={current.fullUrl}
           alt={`${title} — photo ${index + 1} of ${count}`}
@@ -86,7 +86,7 @@ export function ImageCarousel({ photos, title }: ImageCarouselProps) {
                   : "border-transparent opacity-70 hover:opacity-100"
               }`}
             >
-              <Image
+              <AppImage
                 src={photo.fullUrl}
                 alt=""
                 fill

@@ -99,7 +99,7 @@ npm run lint     # ESLint
 - [Next.js 16](https://nextjs.org) (App Router)
 - [TypeScript](https://www.typescriptlang.org)
 - [Tailwind CSS](https://tailwindcss.com)
-- [Sharp](https://sharp.pixelplumbing.com) — image resize, WebP conversion, watermarking
+- [@cf-wasm/photon](https://www.npmjs.com/package/@cf-wasm/photon) — image resize, WebP, watermarking (Node + Workers)
 - [Jose](https://github.com/panva/jose) — session auth
 - [Cloudflare R2](https://www.cloudflare.com/products/r2/) — production storage (optional)
 
@@ -130,7 +130,21 @@ Do not commit `.env.local`, `storage/`, or production secrets.
 
 ## Deployment
 
-Recommended host: [Vercel](https://vercel.com). Set production env vars in the Vercel dashboard, connect R2 for media storage, configure SMTP or Resend for inquiry email, and point your custom domain to the deployment.
+Full step-by-step guide: **[docs/DEPLOY.md](docs/DEPLOY.md)**
+
+**Cloudflare Workers (recommended):**
+
+```bash
+npx wrangler login
+# Configure R2, KV, and secrets (see docs/DEPLOY.md)
+npm run sync:r2
+npm run build:vinext
+npm run deploy:vinext
+```
+
+Local development: `npm run dev` (uses `./storage/` without R2).
+
+Email (Resend) is optional and can be configured later. SMTP is disabled on Workers.
 
 ## License
 

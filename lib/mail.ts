@@ -2,6 +2,7 @@ import "server-only";
 
 import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
+import { isCloudflareWorkers } from "./runtime";
 import type { Inquiry } from "./types";
 
 export type InquiryEmailContent = {
@@ -49,6 +50,10 @@ export function buildInquiryEmailContent(inquiry: Inquiry): InquiryEmailContent 
 }
 
 export function isSmtpConfigured(): boolean {
+  if (isCloudflareWorkers()) {
+    return false;
+  }
+
   return Boolean(
     readEnv("SMTP_USER") && readEnv("SMTP_PASS") && getInquiryRecipient(),
   );
