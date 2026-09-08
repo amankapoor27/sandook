@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { validateUploadFile } from "@/lib/images";
 import { appendPhotosToItem } from "@/lib/item-photos";
+import { getUploadFiles } from "@/lib/form-data-files";
 import { getPublicUrl } from "@/lib/storage";
 import { MAX_PHOTOS_PER_ITEM } from "@/lib/types";
 
@@ -23,9 +24,7 @@ export async function POST(
 ) {
   const { id } = await params;
   const form = await request.formData();
-  const files = form
-    .getAll("file")
-    .filter((entry): entry is File => entry instanceof File);
+  const files = getUploadFiles(form);
 
   if (files.length === 0) {
     return NextResponse.json({ error: "Missing file" }, { status: 400 });

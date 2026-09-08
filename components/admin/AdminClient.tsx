@@ -8,7 +8,9 @@ import type {
   ImageMetadata,
 } from "@/components/admin/ImageMetadataFields";
 import { UploadList } from "@/components/admin/UploadList";
+import { normalizeAdminGalleryImages } from "@/lib/admin-gallery";
 import type { GalleryImageView } from "@/lib/gallery";
+import { readApiError } from "@/lib/api-error";
 import type { Vocabulary } from "@/lib/types";
 
 type AdminClientProps = {
@@ -62,7 +64,7 @@ export function AdminClient({
     const response = await fetch("/api/gallery");
     if (!response.ok) return;
     const data = (await response.json()) as { images: GalleryImageView[] };
-    setImages(data.images);
+    setImages(normalizeAdminGalleryImages(data.images));
   }
 
   async function handleUpload(
@@ -84,21 +86,24 @@ export function AdminClient({
     });
 
     if (!response.ok) {
-      const data = (await response.json()) as { error?: string };
-      throw new Error(data.error ?? "Upload failed");
+      throw new Error(await readApiError(response, "Upload failed"));
     }
 
-    const data = (await response.json()) as { image: { id: string } };
-    const uploadedIds = [data.image.id];
+    const data = (await response.json()) as { image: GalleryImageView };
+    const uploaded = data.image;
 
-    await Promise.all([refreshImages(), refreshVocabulary()]);
-    router.refresh();
+    setEditingId(uploaded.id);
+    setImages((current) =>
+      normalizeAdminGalleryImages([
+        uploaded,
+        ...current.filter((image) => image.id !== uploaded.id),
+      ]),
+    );
 
-    if (uploadedIds.length > 0) {
-      setEditingId(uploadedIds[0]);
-    }
+    await refreshVocabulary();
+    void refreshImages();
 
-    return uploadedIds;
+    return [uploaded.id];
   }
 
   async function handleUpdate(
@@ -131,8 +136,7 @@ export function AdminClient({
     });
 
     if (!response.ok) {
-      const data = (await response.json()) as { error?: string };
-      throw new Error(data.error ?? "Update failed");
+      throw new Error(await readApiError(response, "Update failed"));
     }
 
     await Promise.all([refreshImages(), refreshVocabulary()]);
@@ -143,6 +147,9 @@ export function AdminClient({
     const response = await fetch(`/api/upload/${id}`, { method: "DELETE" });
     if (!response.ok) {
       throw new Error("Delete failed");
+    }
+    if (editingId === id) {
+      setEditingId(null);
     }
     await refreshImages();
     router.refresh();
@@ -160,8 +167,7 @@ export function AdminClient({
     });
 
     if (!response.ok) {
-      const data = (await response.json()) as { error?: string };
-      throw new Error(data.error ?? "Upload failed");
+      throw new Error(await readApiError(response, "Upload failed"));
     }
 
     await refreshImages();
@@ -174,8 +180,7 @@ export function AdminClient({
     });
 
     if (!response.ok) {
-      const data = (await response.json()) as { error?: string };
-      throw new Error(data.error ?? "Remove failed");
+      throw new Error(await readApiError(response, "Remove failed"));
     }
 
     await refreshImages();
@@ -187,7 +192,7 @@ export function AdminClient({
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Manage gallery</h1>
         <p className="mt-1 text-sm text-muted">
-          Upload first, then click Edit to set title, price, and other details.
+          Upload an image — details open at the top of the list below.
         </p>
       </div>
 

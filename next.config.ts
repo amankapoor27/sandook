@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["nodemailer"],
+  serverExternalPackages: ["nodemailer", "@cf-wasm/photon"],
   images: {
     remotePatterns: [
       {
@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
-    unoptimized: process.env.NODE_ENV === "development",
+    // Cloudflare Workers: /_next/image is unavailable; serve /api/media URLs directly.
+    unoptimized:
+      process.env.NODE_ENV === "development" ||
+      process.env.SANDOOK_RUNTIME === "cloudflare",
   },
   async redirects() {
     return [

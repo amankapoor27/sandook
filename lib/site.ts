@@ -21,7 +21,7 @@ Typical turnaround is 4–8 weeks depending on size and complexity. A 50% deposi
     ],
   },
   instagram: "https://instagram.com/sandookstudio",
-  email: "hushedhues2025@gmail.com", //hello@sandook.studio
+  email: "sandookstudio.art@gmail.com", //hello@sandook.studio
   /** International format, no + or spaces — e.g. 919876543210. Set via NEXT_PUBLIC_WHATSAPP_NUMBER. */
   get whatsapp() {
     return process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") ?? "";

@@ -6,29 +6,44 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync:r2": "node scripts/sync-storage-to-r2.mjs",
+    "dev:vinext": "vinext dev --port 3001",
+    "build:vinext": "SANDOOK_RUNTIME=cloudflare vinext build",
+    "start:vinext": "wrangler dev --config dist/server/wrangler.json",
+    "deploy:vinext": "vinext-cloudflare deploy --config dist/server/wrangler.json",
+    "deploy:vinext:warm": "vinext-cloudflare deploy --config dist/server/wrangler.json --experimental-warm-cdn-cache --warm-cdn-target ${NEXT_PUBLIC_SITE_URL} --dangerously-promote-on-cdn-warm-error"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1115.0",
     "@aws-sdk/s3-request-presigner": "^3.1115.0",
+    "@cf-wasm/photon": "^0.4.0",
+    "@vinext/cloudflare": "^1.0.0-beta.7",
     "jose": "^6.2.9",
     "next": "16.3.2",
     "nodemailer": "^9.1.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-server-dom-webpack": "^19.2.8",
     "server-only": "^0.0.1",
-    "sharp": "^0.35.3",
+    "vinext": "^1.0.0-beta.9",
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.54.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/nodemailer": "^8.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitejs/plugin-rsc": "^0.5.34",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+    "typescript": "^5",
+    "vite": "^8.2.2",
+    "wrangler": "^4.128.0"
+  },
+  "type": "module"
 }

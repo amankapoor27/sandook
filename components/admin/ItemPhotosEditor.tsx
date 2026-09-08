@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { AppImage } from "@/components/AppImage";
 import { useRef, useState } from "react";
 import type { GalleryImageView } from "@/lib/gallery";
 import { MAX_PHOTOS_PER_ITEM } from "@/lib/types";
@@ -86,7 +86,7 @@ export function ItemPhotosEditor({
             key={photo.id}
             className="group relative h-20 w-20 overflow-hidden rounded border border-border bg-surface"
           >
-            <Image
+            <AppImage
               src={photo.thumbUrl}
               alt={`Photo ${index + 1}`}
               fill

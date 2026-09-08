@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { AppImage } from "@/components/AppImage";
 import { useCallback, useEffect, useState } from "react";
 import type { GalleryImageView } from "@/lib/gallery";
 
@@ -48,7 +48,7 @@ function LightboxContent({
       onClick={(event) => event.stopPropagation()}
     >
       <div className="group relative flex min-h-[40vh] items-center justify-center">
-        <Image
+        <AppImage
           key={current.id}
           src={current.fullUrl}
           alt={`${image.title} — photo ${index + 1} of ${count}`}

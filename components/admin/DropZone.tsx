@@ -48,7 +48,7 @@ export function DropZone({ onUpload, vocabulary, disabled }: DropZoneProps) {
       setShowDetails(false);
       setMessage(
         uploadedIds.length === 1
-          ? "Uploaded — add title, price & details below."
+          ? "Uploaded — add title, price & details in the panel below."
           : `Uploaded ${uploadedIds.length} images — edit each one below.`,
       );
     } catch (error) {

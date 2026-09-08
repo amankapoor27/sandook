@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AppImage } from "@/components/AppImage";
 import Link from "next/link";
 import type { GalleryImageView } from "@/lib/gallery";
 import { artworkHref } from "@/lib/gallery-nav";
@@ -42,7 +42,7 @@ export function Hero({ featured }: HeroProps) {
               href={artworkHref(featured.slug, featured.category)}
               className="group relative block aspect-[4/3] overflow-hidden bg-line sm:aspect-[3/2]"
             >
-              <Image
+              <AppImage
                 src={featured.fullUrl}
                 alt={featured.title}
                 fill
